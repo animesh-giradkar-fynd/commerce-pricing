@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fynd — Pricing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ─── FYND DESIGN TOKENS ─────────────────────────────────────────── */
+:root {
+  /* Palette — sourced from fynd.com + glamar.io */
+  --white:        #FFFFFF;
+  --black:        #0D0D0D;
+  --page-bg:      #F5F5F2;          /* very warm off-white — exact HubSpot sidebar bg */
+  --nav-bg:       #F5F5F2;
+  --content-bg:   #FFFFFF;
+  --green:        #00B140;          /* Fynd primary green */
+  --green-dark:   #00923A;
+  --green-tint:   #E8F7EE;
+  --green-mid:    #00973A;
+  --gray-100:     #F0F0EC;
+  --gray-200:     #E4E4DE;
+  --gray-300:     #CACAC2;
+  --gray-400:     #9A9A92;
+  --gray-500:     #6E6E68;
+  --gray-700:     #3C3C38;
+  --gray-900:     #1A1A18;
+  --border:       #E0E0D8;
+  --border-light: #EBEBЕ4;
+
+  /* Typography */
+  --font:         'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Layout */
+  --nav-w:        240px;
+  --top-h:        60px;
+  --bar-h:        48px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--page-bg);
+  color: var(--black);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font); cursor: pointer; border: none; background: none; }
+
+/* ─── TOP NAV ─────────────────────────────────────────────────────── */
+.topnav {
+  position: sticky; top: 0; z-index: 300;
+  height: var(--top-h);
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 32px; gap: 32px;
+}
+.logo {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 18px; font-weight: 700;
+  color: var(--black); letter-spacing: -.3px; flex-shrink: 0;
+}
+.logo-box {
+  width: 28px; height: 28px;
+  background: var(--green); border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-box svg { width: 15px; height: 15px; }
+.topnav-links { display: flex; gap: 24px; list-style: none; }
+.topnav-links a {
+  font-size: 14px; color: var(--gray-500); font-weight: 450;
+  transition: color .14s;
+}
+.topnav-links a:hover { color: var(--black); }
+.topnav-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.nav-cta {
+  font-size: 13px; font-weight: 500; padding: 7px 16px;
+  border-radius: 100px; transition: all .14s;
+}
+.nav-cta-ghost {
+  color: var(--gray-500); border: 1px solid var(--gray-300); background: transparent;
+}
+.nav-cta-ghost:hover { color: var(--black); border-color: var(--gray-500); }
+.nav-cta-solid { background: var(--black); color: var(--white); }
+.nav-cta-solid:hover { background: var(--gray-700); }
+
+/* ─── BILLING BAR ─────────────────────────────────────────────────── */
+.billing-bar {
+  position: sticky; top: var(--top-h); z-index: 200;
+  height: var(--bar-h);
+  background: var(--white); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding-left: calc(var(--nav-w) + 32px);
+  padding-right: 32px; gap: 14px;
+}
+.toggle-group {
+  display: inline-flex;
+  background: var(--gray-100);
+  border: 1px solid var(--border);
+  border-radius: 100px; padding: 3px;
+}
+.toggle-btn {
+  font-size: 13px; font-weight: 500;
+  padding: 5px 18px; border-radius: 100px;
+  color: var(--gray-400); background: transparent; border: none;
+  cursor: pointer; transition: all .18s;
+}
+.toggle-btn.on {
+  background: var(--white); color: var(--black);
+  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+}
+.save-tag {
+  font-size: 11px; font-weight: 600; letter-spacing: .03em;
+  color: var(--green-mid); background: var(--green-tint);
+  border: 1px solid rgba(0,150,58,.16);
+  padding: 3px 10px; border-radius: 100px;
+}
+.billing-note { font-size: 12px; color: var(--gray-400); }
+
+/* ─── SHELL ───────────────────────────────────────────────────────── */
+.shell {
+  display: grid;
+  grid-template-columns: var(--nav-w) 1fr;
+  max-width: 1480px;
+  margin: 0 auto;
+  min-height: calc(100vh - var(--top-h) - var(--bar-h));
+}
+
+/* ─── LEFT NAV — HubSpot style ────────────────────────────────────── */
+/*
+  Exact treatment from screenshot:
+  - Warm gray background (#F5F5F2)
+  - No icons, no badges, no pills
+  - Section title: bold, 15-16px
+  - Items: regular weight, 15px, generous vertical padding
+  - Active item: 3px solid dark left border + full-width bg highlight
+  - Horizontal rule divider between sections
+  - No rounded corners on active state — full width flush
+*/
+.leftnav {
+  background: var(--nav-bg);
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: calc(var(--top-h) + var(--bar-h));
+  height: calc(100vh - var(--top-h) - var(--bar-h));
+  overflow-y: auto;
+  padding: 24px 0 32px;
+}
+.leftnav::-webkit-scrollbar { width: 0; }
+
+.nav-section { margin-bottom: 8px; }
+
+.nav-section-title {
+  font-size: 15px; font-weight: 700; color: var(--black);
+  padding: 0 24px 12px;
+  display: block;
+}
+
+.nav-link {
+  display: block; width: 100%;
+  padding: 11px 24px;
+  font-size: 15px; font-weight: 400; color: var(--gray-700);
+  background: transparent;
+  border-left: 3px solid transparent;
+  text-align: left; cursor: pointer;
+  transition: background .12s, color .12s, border-color .12s;
+  border-right: none; border-top: none; border-bottom: none;
+  line-height: 1.4;
+}
+.nav-link:hover {
+  background: rgba(0,0,0,.04);
+  color: var(--black);
+}
+.nav-link.active {
+  background: rgba(0,0,0,.06);
+  border-left-color: var(--black);
+  color: var(--black);
+  font-weight: 500;
+}
+
+.nav-rule {
+  height: 1px;
+  background: var(--border);
+  margin: 16px 24px 20px;
+}
+
+/* ─── MAIN CONTENT ────────────────────────────────────────────────── */
+.main {
+  background: var(--white);
+  padding: 40px 48px 80px;
+  min-width: 0;
+}
+
+/* ─── PANEL VISIBILITY ────────────────────────────────────────────── */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ─── PROMO BANNER ────────────────────────────────────────────────── */
+.promo-banner {
+  border: 1px solid #C8D9F8;
+  background: #EEF4FF;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 28px;
+}
+.promo-banner b { color: #1E40AF; font-weight: 600; font-size: 14px; }
+.promo-banner p { color: #3B5BD4; font-size: 13px; margin-top: 3px; line-height: 1.5; }
+
+/* ─── SECTION HEAD ────────────────────────────────────────────────── */
+.section-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--green-mid); margin-bottom: 6px;
+}
+.section-title {
+  font-size: 28px; font-weight: 700; letter-spacing: -.6px;
+  color: var(--black); margin-bottom: 8px; line-height: 1.2;
+}
+.section-desc {
+  font-size: 15px; color: var(--gray-500); margin-bottom: 28px;
+  max-width: 560px; line-height: 1.55;
+}
+.section-desc a {
+  color: var(--green-mid); font-weight: 500;
+  border-bottom: 1px solid rgba(0,151,58,.28);
+}
+.section-desc a:hover { border-color: var(--green); }
+
+/* ─── CARDS GRID ──────────────────────────────────────────────────── */
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 40px;
+}
+.cards-row.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* ─── PLAN CARD ───────────────────────────────────────────────────── */
+.card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 20px 20px;
+  background: var(--white);
+  display: flex; flex-direction: column;
+  transition: box-shadow .2s;
+}
+.card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); }
+.card.featured { border: 2px solid var(--green); }
+
+.badge-pop {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; letter-spacing: .02em;
+  color: var(--green-mid); background: var(--green-tint);
+  border: 1px solid rgba(0,150,58,.18);
+  padding: 3px 10px; border-radius: 100px; margin-bottom: 10px;
+}
+
+.card-name { font-size: 18px; font-weight: 700; color: var(--black); margin-bottom: 3px; }
+.card-tagline { font-size: 12px; color: var(--gray-400); margin-bottom: 18px; line-height: 1.4; }
+
+.price-area {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0; margin-bottom: 16px;
+}
+.price-eyebrow {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--gray-400); margin-bottom: 5px;
+}
+.price-main { display: flex; align-items: baseline; gap: 2px; }
+.price-sym {
+  font-size: 17px; font-weight: 700; color: var(--black);
+  align-self: flex-start; padding-top: 5px; line-height: 1;
+}
+.price-num {
+  font-size: 36px; font-weight: 700; letter-spacing: -1.2px;
+  color: var(--black); line-height: 1;
+}
+.price-num.free-price { font-size: 28px; letter-spacing: -.5px; }
+.price-per { font-size: 13px; color: var(--gray-400); margin-left: 4px; align-self: flex-end; padding-bottom: 2px; }
+.price-annual { font-size: 11px; color: var(--gray-400); margin-top: 4px; }
+.price-note { font-size: 11px; color: var(--green-mid); font-weight: 500; margin-top: 3px; }
+
+.card-btn {
+  width: 100%; padding: 10px 16px;
+  border-radius: 100px;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .15s;
+  margin-bottom: 18px;
+  font-family: var(--font);
+}
+.btn-outline {
+  background: transparent; color: var(--black);
+  border: 1.5px solid var(--gray-300);
+}
+.btn-outline:hover { border-color: var(--black); }
+.btn-dark { background: var(--black); color: var(--white); border: none; }
+.btn-dark:hover { background: var(--gray-700); }
+.btn-green { background: var(--green); color: var(--white); border: none; }
+.btn-green:hover { background: var(--green-dark); }
+
+.feat-heading {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--gray-400); margin-bottom: 10px;
+}
+.feat-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.feat-list li {
+  display: flex; align-items: flex-start; gap: 7px;
+  font-size: 12px; color: var(--gray-500); line-height: 1.4;
+}
+.feat-tick { color: var(--green); font-size: 13px; flex-shrink: 0; margin-top: 1px; font-weight: 700; }
+.feat-list li strong { color: var(--black); font-weight: 500; }
+
+/* ─── COMPARE TABLE ───────────────────────────────────────────────── */
+.compare-wrap { margin-top: 4px; }
+.compare-title {
+  font-size: 20px; font-weight: 700; letter-spacing: -.4px;
+  color: var(--black); margin-bottom: 4px;
+}
+.compare-sub { font-size: 13px; color: var(--gray-400); margin-bottom: 16px; }
+
+.tbl-outer {
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden; background: var(--white);
+}
+table {
+  width: 100%; border-collapse: collapse;
+}
+thead th {
+  padding: 13px 16px; text-align: left;
+  font-size: 12px; font-weight: 600; color: var(--gray-400);
+  background: var(--gray-100); border-bottom: 1px solid var(--border);
+}
+thead th:not(:first-child) { text-align: center; color: var(--black); font-size: 13px; }
+.th-green { color: var(--green-mid) !important; }
+tbody tr { border-bottom: 1px solid var(--border-light); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:nth-child(even):not(.cat-tr) { background: #FAFAF8; }
+td {
+  padding: 12px 16px; font-size: 13px;
+  color: var(--gray-500); vertical-align: middle;
+}
+td:not(:first-child) { text-align: center; color: var(--black); }
+.cat-tr { background: var(--gray-100) !important; cursor: pointer; user-select: none; }
+.cat-tr td {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--gray-400); padding: 9px 16px;
+}
+.cat-tr td:first-child {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cat-tr td:first-child::after {
+  content: '▾'; font-size: 9px; transition: transform .2s;
+}
+.cat-tr.closed td:first-child::after { transform: rotate(-90deg); }
+.c-yes { color: var(--green); font-weight: 700; font-size: 14px; }
+.c-no  { color: var(--gray-300); font-size: 15px; }
+.c-add { font-size: 11px; font-weight: 500; color: #9A5800; background: #FFF3D0; padding: 2px 7px; border-radius: 4px; display: inline-block; }
+.c-txt { font-size: 12px; }
+.c-cus { font-size: 12px; color: var(--gray-400); font-style: italic; }
+
+/* ─── ADD-ONS ─────────────────────────────────────────────────────── */
+.addons-section { margin-top: 48px; }
+.addons-title { font-size: 20px; font-weight: 700; letter-spacing: -.4px; margin-bottom: 4px; }
+.addons-sub { font-size: 13px; color: var(--gray-400); margin-bottom: 20px; }
+.addons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.addon {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px;
+  display: flex; flex-direction: column; gap: 8px;
+  transition: border-color .15s;
+}
+.addon.on { border-color: var(--green); background: var(--green-tint); }
+.addon-name { font-size: 13px; font-weight: 600; color: var(--black); }
+.addon-desc { font-size: 12px; color: var(--gray-500); line-height: 1.5; flex: 1; }
+.addon-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 10px; border-top: 1px solid var(--border); margin-top: auto;
+}
+.addon-price { font-size: 12px; color: var(--gray-500); }
+.addon-price strong { color: var(--black); }
+.addon-btn {
+  font-size: 12px; font-weight: 600; padding: 5px 12px;
+  border-radius: 100px; border: 1.5px solid var(--gray-300);
+  color: var(--gray-700); background: transparent;
+  cursor: pointer; transition: all .14s; font-family: var(--font);
+}
+.addon-btn:hover { border-color: var(--green); color: var(--green); }
+.addon.on .addon-btn { background: var(--green); color: var(--white); border-color: var(--green); }
+
+/* ─── HAMBURGER + CURRENT SECTION (mobile only) ──────────────────── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  margin-right: 4px;
+  flex-shrink: 0;
+  transition: background .12s, border-color .12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.hamburger:hover { background: rgba(0,0,0,.04); }
+.hamburger:active { background: rgba(0,0,0,.08); }
+.hamburger span {
+  display: block;
+  width: 18px; height: 2px;
+  background: var(--black);
+  border-radius: 2px;
+  transition: transform .2s, opacity .2s;
+  margin: 0 auto;
+}
+body.drawer-open .hamburger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+body.drawer-open .hamburger span:nth-child(2) { opacity: 0; }
+body.drawer-open .hamburger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+.current-section {
+  display: none;
+  font-size: 13px; font-weight: 500;
+  color: var(--gray-700);
+  background: var(--gray-100);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 5px 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+/* ─── NAV BACKDROP (mobile drawer overlay) ───────────────────────── */
+.nav-backdrop {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 350;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease;
+}
+body.drawer-open .nav-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ─── COMPARE TABLE HORIZONTAL SCROLL WRAPPER ────────────────────── */
+.tbl-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ─── HOVER-ONLY EFFECTS (skip on touch) ─────────────────────────── */
+@media (hover: none) {
+  .card:hover { box-shadow: none; }
+  .nav-link:hover { background: transparent; color: var(--gray-700); }
+  .topnav-links a:hover { color: var(--gray-500); }
+  .nav-cta-ghost:hover { color: var(--gray-500); border-color: var(--gray-300); }
+  .nav-cta-solid:hover { background: var(--black); }
+  .btn-outline:hover { border-color: var(--gray-300); }
+  .btn-dark:hover { background: var(--black); }
+  .btn-green:hover { background: var(--green); }
+  .addon-btn:hover { border-color: var(--gray-300); color: var(--gray-700); }
+  .hamburger:hover { background: transparent; }
+}
+
+/* ─── RESPONSIVE BREAKPOINTS ─────────────────────────────────────── */
+/* Aligned with Webflow defaults: 991 / 767 / 479 */
+
+/* Tablet portrait & smaller — narrower content */
+@media (max-width: 1100px) {
+  .cards-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cards-row.cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .main { padding: 36px 36px 64px; }
+}
+
+/* ≤991px — sidebar becomes hamburger drawer */
+@media (max-width: 991px) {
+  /* Layout shifts: shell becomes single-column */
+  .shell { grid-template-columns: 1fr; }
+  .billing-bar {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  /* Reveal hamburger + current-section chip in topnav */
+  .hamburger { display: flex; }
+  .current-section { display: inline-block; }
+
+  /* Hide secondary topnav items to free up space */
+  .topnav-links { display: none; }
+  .topnav-phone { display: none; }
+  .topnav { padding: 0 16px; gap: 12px; }
+  .topnav-right { gap: 6px; }
+  .nav-cta { padding: 6px 12px; font-size: 12px; }
+
+  /* Drawer backdrop visible (opacity controlled by .drawer-open) */
+  .nav-backdrop { display: block; }
+
+  /* Sidebar transforms into off-canvas drawer */
+  .leftnav {
+    position: fixed;
+    top: 0; left: 0;
+    width: 280px;
+    max-width: 86vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 400;
+    transform: translateX(-100%);
+    transition: transform .22s ease;
+    box-shadow: 4px 0 24px rgba(0,0,0,.1);
+    padding: 24px 0 32px;
+    border-right: 1px solid var(--border);
+    background: var(--nav-bg);
+  }
+  body.drawer-open .leftnav { transform: translateX(0); }
+  body.drawer-open { overflow: hidden; }
+
+  /* Bigger nav items for touch */
+  .nav-link { padding: 14px 24px; font-size: 16px; }
+  .nav-section-title { padding: 0 24px 14px; font-size: 14px; }
+}
+
+/* ≤767px — mobile landscape */
+@media (max-width: 767px) {
+  .main { padding: 28px 24px 56px; }
+  .section-title { font-size: 24px; letter-spacing: -.4px; }
+  .section-desc { font-size: 14px; margin-bottom: 24px; }
+
+  /* Compare table: horizontal scroll with sticky first column */
+  .tbl-outer { border-radius: 10px; }
+  .tbl-scroll table { min-width: 640px; }
+  .tbl-scroll thead th:first-child,
+  .tbl-scroll tbody td:first-child {
+    position: sticky;
+    left: 0;
+    background: var(--white);
+    z-index: 2;
+    box-shadow: 1px 0 0 var(--border);
+  }
+  .tbl-scroll tbody tr:nth-child(even):not(.cat-tr) td:first-child { background: #FAFAF8; }
+  .tbl-scroll thead th:first-child { background: var(--gray-100); }
+  .tbl-scroll .cat-tr td:first-child { background: var(--gray-100); }
+
+  /* Touch target sizes */
+  .toggle-btn { padding: 8px 16px; font-size: 13px; }
+  .addon-btn { padding: 8px 14px; font-size: 12px; }
+}
+
+/* ≤479px — mobile portrait */
+@media (max-width: 479px) {
+  .cards-row, .cards-row.cols-3 { grid-template-columns: 1fr; }
+  .main { padding: 24px 16px 48px; }
+  .billing-bar {
+    padding-left: 16px; padding-right: 16px;
+    height: auto; min-height: var(--bar-h);
+    flex-wrap: wrap; gap: 8px; padding-top: 8px; padding-bottom: 8px;
+  }
+  .billing-note { font-size: 11px; }
+  .topnav { padding: 0 12px; }
+  .nav-cta-ghost { display: none; }
+  .current-section { max-width: 120px; font-size: 12px; }
+  .section-title { font-size: 22px; }
+  .compare-title, .addons-title { font-size: 18px; }
+  .addons-grid { grid-template-columns: 1fr; }
+  .footer-note { padding: 16px !important; font-size: 11px !important; }
+  .price-num { font-size: 32px; }
+  .card { padding: 20px 18px 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <button class="hamburger" id="js-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-leftnav" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="logo">
+    <div class="logo-box">
+      <svg viewBox="0 0 15 12" fill="none" aria-hidden="true">
+        <path d="M13 2H7.5C6.67 2 6 2.67 6 3.5V5.5h5V7c0 .83-.67 1.5-1.5 1.5H1.5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    Fynd
+  </div>
+  <span class="current-section" id="js-current-section" aria-live="polite">Customer Platform</span>
+  <ul class="topnav-links">
+    <li><a href="#">Solutions</a></li>
+    <li><a href="#">Resources</a></li>
+    <li><a href="#">Company</a></li>
+    <li><a href="#">Customer stories</a></li>
+  </ul>
+  <div class="topnav-right">
+    <span class="topnav-phone" style="font-size:13px;color:var(--gray-400)">+91 74001 56169</span>
+    <button class="nav-cta nav-cta-ghost">Book a demo</button>
+    <button class="nav-cta nav-cta-solid">Sign in</button>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER BACKDROP -->
+<div class="nav-backdrop" id="js-backdrop" onclick="closeDrawer()" aria-hidden="true"></div>
+
+<!-- BILLING TOGGLE BAR -->
+<div class="billing-bar">
+  <div class="toggle-group" role="group" aria-label="Billing period">
+    <button class="toggle-btn" id="btn-m" onclick="setBilling('monthly')">Monthly</button>
+    <button class="toggle-btn on" id="btn-a" onclick="setBilling('annual')">Annual</button>
+  </div>
+  <span class="save-tag">Save 20%</span>
+  <span class="billing-note">30-day free trial on all plans</span>
+</div>
+
+<!-- MAIN SHELL -->
+<div class="shell">
+
+  <!-- ═══ LEFT NAV ═══ -->
+  <nav class="leftnav" id="js-leftnav" aria-label="Pricing sections">
+
+    <div class="nav-section">
+      <span class="nav-section-title">Platform Solutions</span>
+
+      <button class="nav-link active" id="nl-platform" onclick="show('platform')">
+        Customer Platform
+      </button>
+      <button class="nav-link" id="nl-free" onclick="show('free')">
+        Free Tools
+      </button>
+      <button class="nav-link" id="nl-bundle" onclick="show('bundle')">
+        Create a Bundle
+      </button>
+      <button class="nav-link" id="nl-smb" onclick="show('smb')">
+        Fynd for SMBs
+      </button>
+    </div>
+
+    <div class="nav-rule"></div>
+
+    <div class="nav-section">
+      <span class="nav-section-title">Products</span>
+
+      <button class="nav-link" id="nl-storefront" onclick="show('storefront')">
+        Storefront
+      </button>
+      <button class="nav-link" id="nl-pos" onclick="show('pos')">
+        Store OS / POS
+      </button>
+      <button class="nav-link" id="nl-konnect" onclick="show('konnect')">
+        Konnect
+      </button>
+      <button class="nav-link" id="nl-logistics" onclick="show('logistics')">
+        Managed Logistics
+      </button>
+      <button class="nav-link" id="nl-ai" onclick="show('ai')">
+        AI Studio
+      </button>
+      <button class="nav-link" id="nl-oms" onclick="show('oms')">
+        OMS / WMS
+      </button>
+    </div>
+
+  </nav>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="main" id="main-content">
+
+    <!-- ─── CUSTOMER PLATFORM (default) ─── -->
+    <div class="panel active" id="panel-platform">
+
+      <div class="promo-banner">
+        <b>Save up to 20% on annual plans</b>
+        <p>Get Starter now: ₹1,199/mo (was ₹1,499) billed annually. 30-day free trial included. No credit card required.</p>
+      </div>
+
+      <div class="section-label">Customer Platform</div>
+      <h1 class="section-title">Everything you need to sell, bundled</h1>
+      <p class="section-desc">
+        All Fynd products in one plan, discounted.
+        <a href="#">Calculate your price →</a>
+      </p>
+
+      <div class="cards-row" id="platform-cards">
+
+        <!-- FREE -->
+        <div class="card">
+          <div class="card-name">Free</div>
+          <div class="card-tagline">Foundational tools to get you started. No credit card required.</div>
+          <div class="price-area">
+            <div class="price-eyebrow">Price</div>
+            <div class="price-main">
+              <span class="price-num free-price">₹0</span>
+              <span class="price-per">/month</span>
+            </div>
+            <div class="price-annual">Free for up to 3 users</div>
+          </div>
+          <button class="card-btn btn-outline">Get started free</button>
+          <div class="feat-heading">Includes</div>
+          <ul class="feat-list">
+            <li><span class="feat-tick">✓</span> 1 storefront</li>
+            <li><span class="feat-tick">✓</span> Basic order management</li>
+            <li><span class="feat-tick">✓</span> Ask Fynd AI</li>
+            <li><span class="feat-tick">✓</span> Reports &amp; dashboards</li>
+            <li><span class="feat-tick">✓</span> 500 commerce credits</li>
+          </ul>
+        </div>
+
+        <!-- STARTER -->
+        <div class="card">
+          <div class="card-name">Starter</div>
+          <div class="card-tagline">Essential commerce for new &amp; growing brands.</div>
+          <div class="price-area">
+            <div class="price-eyebrow">Starts at</div>
+            <div class="price-main">
+              <span class="price-sym">₹</span>
+              <span class="price-num pp" data-a="11,111" data-m="1,499">11,111</span>
+              <span class="price-per pq" data-a="/year" data-m="/month">/year</span>
+            </div>
+            <div class="price-annual ps" data-a="₹1,499/month · billed annually" data-m="No annual commitment">₹1,499/month · billed annually</div>
+            <div class="price-note">30 days free · then ₹11/m for 3 months</div>
+          </div>
+          <button class="card-btn btn-outline">Start free trial →</button>
+          <div class="feat-heading">Includes</div>
+          <ul class="feat-list">
+            <li><span class="feat-tick">✓</span> 1 storefront · 10 locations</li>
+            <li><span class="feat-tick">✓</span> Payment gateways</li>
+            <li><span class="feat-tick">✓</span> Custom domain</li>
+            <li><span class="feat-tick">✓</span> Sell on marketplaces</li>
+            <li><span class="feat-tick">✓</span> Return &amp; refund management</li>
+            <li><span class="feat-tick">✓</span> Staff accounts</li>
+          </ul>
+        </div>
+
+        <!-- PROFESSIONAL (featured) -->
+        <div class="card featured">
+          <div class="badge-pop">
+            <svg width="9" height="9" viewBox="0 0 9 9" aria-hidden="true"><path d="M4.5 1 5.6 3.5 8 3.8 6.2 5.5l.5 2.4L4.5 6.7 2.3 7.9l.5-2.4L1 3.8l2.4-.3z" fill="#00B140"/></svg>
+            Most popular
+          </div>
+          <div class="card-name">Professional</div>
+          <div class="card-tagline">For omnichannel retailers scaling online &amp; offline.</div>
+          <div class="price-area">
+            <div class="price-eyebrow">Starts at</div>
+            <div class="price-main">
+              <span class="price-sym">₹</span>
+              <span class="price-num pp" data-a="22,222" data-m="2,999">22,222</span>
+              <span class="price-per pq" data-a="/year" data-m="/month">/year</span>
+            </div>
+            <div class="price-annual ps" data-a="₹2,999/month · billed annually" data-m="No annual commitment">₹2,999/month · billed annually</div>
+          </div>
+          <button class="card-btn btn-dark">Start free trial →</button>
+          <div class="feat-heading">Everything in Starter, plus:</div>
+          <ul class="feat-list">
+            <li><span class="feat-tick">✓</span> Quick commerce</li>
+            <li><span class="feat-tick">✓</span> Loyalty (Fynd Engage)</li>
+            <li><span class="feat-tick">✓</span> Email &amp; SMS campaigns</li>
+            <li><span class="feat-tick">✓</span> Rich customer profile (AI)</li>
+            <li><span class="feat-tick">✓</span> Full webhook &amp; API access</li>
+            <li><span class="feat-tick">✓</span> Map-based shipping zones</li>
+            <li><span class="feat-tick">✓</span> Offline POS (add-on)</li>
+          </ul>
+        </div>
+
+        <!-- ENTERPRISE -->
+        <div class="card">
+          <div class="card-name">Enterprise</div>
+          <div class="card-tagline">For large retail chains, marketplaces &amp; complex operations.</div>
+          <div class="price-area">
+            <div class="price-eyebrow">Custom pricing</div>
+            <div class="price-main">
+              <span class="price-num free-price">Custom</span>
+            </div>
+            <div class="price-annual">From 0.25% transaction fee</div>
+          </div>
+          <button class="card-btn btn-outline">Talk to sales →</button>
+          <div class="feat-heading">Everything in Professional, plus:</div>
+          <ul class="feat-list">
+            <li><span class="feat-tick">✓</span> B2B storefront</li>
+            <li><span class="feat-tick">✓</span> Multi-seller marketplace</li>
+            <li><span class="feat-tick">✓</span> Custom checkout experience</li>
+            <li><span class="feat-tick">✓</span> Advanced clienteling + AI</li>
+            <li><span class="feat-tick">✓</span> Dedicated account manager</li>
+            <li><span class="feat-tick">✓</span> Custom analytics</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Compare table -->
+      <div class="compare-wrap">
+        <div class="compare-title">Compare all features</div>
+        <div class="compare-sub">Full breakdown of what's included in each plan</div>
+        <div class="tbl-outer">
+          <div class="tbl-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:36%">Feature</th>
+                  <th>Free</th>
+                  <th>Starter</th>
+                  <th class="th-green">Professional</th>
+                  <th>Enterprise</th>
+                </tr>
+              </thead>
+              <tbody id="tbl-platform"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add-ons -->
+      <div class="addons-section">
+        <div class="addons-title">Add-on services</div>
+        <div class="addons-sub">Available on all plans — pay only for what you use</div>
+        <div class="addons-grid">
+          <div class="addon" id="ao-pos">
+            <div class="addon-name">Store OS / POS</div>
+            <div class="addon-desc">Full POS for physical stores. Offline mode, barcode printing, EDC payments.</div>
+            <div class="addon-foot">
+              <div class="addon-price">From <strong>₹2,500/location/yr</strong></div>
+              <button class="addon-btn" onclick="toggleAddon('pos')">+ Add</button>
+            </div>
+          </div>
+          <div class="addon" id="ao-ai">
+            <div class="addon-name">AI Studio</div>
+            <div class="addon-desc">Studio-quality product photos, video, background removal. Credit-based.</div>
+            <div class="addon-foot">
+              <div class="addon-price">From <strong>₹50/credit</strong></div>
+              <button class="addon-btn" onclick="toggleAddon('ai')">+ Add</button>
+            </div>
+          </div>
+          <div class="addon" id="ao-logistics">
+            <div class="addon-name">Managed Logistics</div>
+            <div class="addon-desc">End-to-end fulfillment, NDR automation, shipment insurance. India only.</div>
+            <div class="addon-foot">
+              <div class="addon-price">From <strong>₹1/credit</strong></div>
+              <button class="addon-btn" onclick="toggleAddon('logistics')">+ Add</button>
+            </div>
+          </div>
+          <div class="addon" id="ao-boltic">
+            <div class="addon-name">Commerce Automation</div>
+            <div class="addon-desc">No-code workflow builder. Connect tools and automate operations.</div>
+            <div class="addon-foot">
+              <div class="addon-price"><strong>Paid service</strong></div>
+              <button class="addon-btn" onclick="toggleAddon('boltic')">+ Add</button>
+            </div>
+          </div>
+          <div class="addon" id="ao-kaily">
+            <div class="addon-name">Kaily AI Agent</div>
+            <div class="addon-desc">Conversational commerce for WhatsApp &amp; web. Automate sales &amp; support.</div>
+            <div class="addon-foot">
+              <div class="addon-price"><strong>Paid service</strong></div>
+              <button class="addon-btn" onclick="toggleAddon('kaily')">+ Add</button>
+            </div>
+          </div>
+          <div class="addon" id="ao-konnect">
+            <div class="addon-name">Konnect Marketplaces</div>
+            <div class="addon-desc">Sell on Amazon, Myntra, Flipkart, Noon and 50+ with real-time sync.</div>
+            <div class="addon-foot">
+              <div class="addon-price">From <strong>₹2/order</strong></div>
+              <button class="addon-btn" onclick="toggleAddon('konnect')">+ Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /panel-platform -->
+
+    <!-- ─── FREE TOOLS ─── -->
+    <div class="panel" id="panel-free">
+      <div class="section-label">Free Tools</div>
+      <h1 class="section-title">Start with Fynd — no credit card</h1>
+      <p class="section-desc">Everything you need to get your commerce operation running from day one. No commitment.</p>
+      <div class="cards-row cols-3">
+        <div class="card">
+          <div class="card-name">Free Storefront</div>
+          <div class="card-tagline">1 storefront with Fynd subdomain</div>
+          <div class="price-area"><div class="price-main"><span class="price-num free-price">₹0</span><span class="price-per">/forever</span></div></div>
+          <button class="card-btn btn-outline">Get started →</button>
+          <ul class="feat-list"><li><span class="feat-tick">✓</span> 1 storefront · Fynd subdomain</li><li><span class="feat-tick">✓</span> Basic catalog</li><li><span class="feat-tick">✓</span> COD payments</li><li><span class="feat-tick">✓</span> Reports dashboard</li></ul>
+        </div>
+        <div class="card">
+          <div class="card-name">Free OMS</div>
+          <div class="card-tagline">Basic order management for small teams</div>
+          <div class="price-area"><div class="price-main"><span class="price-num free-price">₹0</span><span class="price-per">/forever</span></div></div>
+          <button class="card-btn btn-outline">Get started →</button>
+          <ul class="feat-list"><li><span class="feat-tick">✓</span> Up to 100 orders/month</li><li><span class="feat-tick">✓</span> Standard return management</li><li><span class="feat-tick">✓</span> 1 fulfilment location</li></ul>
+        </div>
+        <div class="card">
+          <div class="card-name">Free AI Studio</div>
+          <div class="card-tagline">100 AI credits to try product image generation</div>
+          <div class="price-area"><div class="price-main"><span class="price-num free-price">₹0</span><span class="price-per">/trial</span></div></div>
+          <button class="card-btn btn-outline">Try now →</button>
+          <ul class="feat-list"><li><span class="feat-tick">✓</span> 100 free AI credits</li><li><span class="feat-tick">✓</span> Image transformation &amp; generation</li><li><span class="feat-tick">✓</span> Background removal</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── CREATE A BUNDLE ─── -->
+    <div class="panel" id="panel-bundle">
+      <div class="section-label">Create a Bundle</div>
+      <h1 class="section-title">Build your own plan</h1>
+      <p class="section-desc">Pick exactly the products you need and get a custom quote. No paying for what you don't use.</p>
+      <div style="background:var(--gray-100);border:1px solid var(--border);border-radius:12px;padding:40px;text-align:center;color:var(--gray-400)">
+        <div style="font-size:14px;font-weight:600;color:var(--black);margin-bottom:6px">Bundle configurator</div>
+        <div style="font-size:13px;margin-bottom:20px">Select individual products from the left panel to compose a custom stack, or speak to our team directly.</div>
+        <button class="card-btn btn-green" style="width:auto;display:inline-block;padding:10px 28px">Talk to sales →</button>
+      </div>
+    </div>
+
+    <!-- ─── FYND FOR SMBS ─── -->
+    <div class="panel" id="panel-smb">
+      <div class="section-label">Fynd for SMBs</div>
+      <h1 class="section-title">Built for growing businesses</h1>
+      <p class="section-desc">Special pricing and onboarding support for small &amp; medium businesses scaling their commerce operations.</p>
+      <div class="cards-row cols-3">
+        <div class="card featured">
+          <div class="badge-pop">Recommended</div>
+          <div class="card-name">SMB Starter Pack</div>
+          <div class="card-tagline">Platform + Logistics + Konnect bundled</div>
+          <div class="price-area">
+            <div class="price-eyebrow">Starts at</div>
+            <div class="price-main"><span class="price-sym">₹</span><span class="price-num pp" data-a="14,999" data-m="1,799">14,999</span><span class="price-per pq" data-a="/year" data-m="/month">/year</span></div>
+            <div class="price-annual ps" data-a="₹1,799/month · billed annually" data-m="No annual commitment">₹1,799/month · billed annually</div>
+          </div>
+          <button class="card-btn btn-dark">Start free trial →</button>
+          <ul class="feat-list"><li><span class="feat-tick">✓</span> Everything in Starter</li><li><span class="feat-tick">✓</span> Konnect access included</li><li><span class="feat-tick">✓</span> 500 logistics credits</li><li><span class="feat-tick">✓</span> Guided onboarding</li></ul>
+        </div>
+        <div class="card">
+          <div class="card-name">SMB Growth Pack</div>
+          <div class="card-tagline">Platform + POS + AI Studio bundled</div>
+          <div class="price-area">
+            <div class="price-eyebrow">Starts at</div>
+            <div class="price-main"><span class="price-sym">₹</span><span class="price-num pp" data-a="28,999" data-m="3,499">28,999</span><span class="price-per pq" data-a="/year" data-m="/month">/year</span></div>
+          </div>
+          <button class="card-btn btn-outline">Start free trial →</button>
+          <ul class="feat-list"><li><span class="feat-tick">✓</span> Everything in Professional</li><li><span class="feat-tick">✓</span> 1 POS location included</li><li><span class="feat-tick">✓</span> 200 AI Studio credits</li></ul>
+        </div>
+        <div class="card">
+          <div class="card-name">Custom for Enterprise</div>
+          <div class="card-tagline">Tailored for large &amp; complex operations</div>
+          <div class="price-area"><div class="price-main"><span class="price-num free-price">Custom</span></div></div>
+          <button class="card-btn btn-outline">Talk to sales →</button>
+          <ul class="feat-list"><li><span class="feat-tick">✓</span> Volume discounts</li><li><span class="feat-tick">✓</span> Dedicated implementation</li><li><span class="feat-tick">✓</span> SLA guarantees</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── STOREFRONT ─── -->
+    <div class="panel" id="panel-storefront">
+      <div class="section-label">Storefront</div>
+      <h1 class="section-title">Storefront pricing</h1>
+      <p class="section-desc">Launch your D2C website with built-in SEO, payments, and logistics. Starts at ₹11,111/year.</p>
+      <div class="cards-row">
+        <div class="card"><div class="card-name">Free</div><div class="card-tagline">1 storefront · Fynd subdomain</div><div class="price-area"><div class="price-main"><span class="price-num free-price">₹0</span></div></div><button class="card-btn btn-outline">Get started →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> 1 storefront</li><li><span class="feat-tick">✓</span> Basic catalog</li></ul></div>
+        <div class="card"><div class="card-name">Starter</div><div class="card-tagline">For growing brands</div><div class="price-area"><div class="price-main"><span class="price-sym">₹</span><span class="price-num pp" data-a="11,111" data-m="1,499">11,111</span><span class="price-per pq" data-a="/year" data-m="/month">/year</span></div><div class="price-annual ps" data-a="₹1,499/month · annually" data-m="">₹1,499/month · annually</div></div><button class="card-btn btn-outline">Start free trial →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Custom domain</li><li><span class="feat-tick">✓</span> Payment gateways</li><li><span class="feat-tick">✓</span> 10 fulfilment locations</li></ul></div>
+        <div class="card featured"><div class="badge-pop">Most popular</div><div class="card-name">Professional</div><div class="card-tagline">Omnichannel retailers</div><div class="price-area"><div class="price-main"><span class="price-sym">₹</span><span class="price-num pp" data-a="22,222" data-m="2,999">22,222</span><span class="price-per pq" data-a="/year" data-m="/month">/year</span></div></div><button class="card-btn btn-dark">Start free trial →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Quick commerce</li><li><span class="feat-tick">✓</span> Map-based shipping</li><li><span class="feat-tick">✓</span> Email &amp; SMS campaigns</li></ul></div>
+        <div class="card"><div class="card-name">Enterprise</div><div class="card-tagline">5+ storefronts · Marketplace</div><div class="price-area"><div class="price-main"><span class="price-num free-price">Custom</span></div></div><button class="card-btn btn-outline">Talk to sales →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> B2B &amp; marketplace</li><li><span class="feat-tick">✓</span> Custom checkout</li></ul></div>
+      </div>
+    </div>
+
+    <!-- ─── STORE OS / POS ─── -->
+    <div class="panel" id="panel-pos">
+      <div class="section-label">Store OS / POS</div>
+      <h1 class="section-title">In-store technology pricing</h1>
+      <p class="section-desc">Priced per ordering location. Includes device and staff user fees. Add locations as you grow.</p>
+      <div class="cards-row cols-3">
+        <div class="card"><div class="card-name">Starter</div><div class="card-tagline">1 free ordering location included</div><div class="price-area"><div class="price-main"><span class="price-num free-price">Included</span></div><div class="price-annual">With any Commerce plan</div></div><button class="card-btn btn-outline">Get started →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> 1 location · 1 device · 1 user</li><li><span class="feat-tick">✓</span> Cash register management</li><li><span class="feat-tick">✓</span> Digital invoices</li></ul></div>
+        <div class="card featured"><div class="badge-pop">Per location</div><div class="card-name">Growth / Scale</div><div class="card-tagline">For multi-store operators</div><div class="price-area"><div class="price-eyebrow">Per ordering location</div><div class="price-main"><span class="price-sym">₹</span><span class="price-num">2,500</span><span class="price-per">/yr</span></div><div class="price-annual">+ ₹500/user · ₹2,500/device</div></div><button class="card-btn btn-dark">Add locations →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Offline POS mode</li><li><span class="feat-tick">✓</span> Barcode printing</li><li><span class="feat-tick">✓</span> EDC payments</li><li><span class="feat-tick">✓</span> Endless aisle</li></ul></div>
+        <div class="card"><div class="card-name">Enterprise</div><div class="card-tagline">Volume pricing available</div><div class="price-area"><div class="price-main"><span class="price-num free-price">Custom</span></div></div><button class="card-btn btn-outline">Talk to sales →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Advanced clienteling + AI</li><li><span class="feat-tick">✓</span> Connected apps</li><li><span class="feat-tick">✓</span> Return to any store</li></ul></div>
+      </div>
+    </div>
+
+    <!-- ─── KONNECT ─── -->
+    <div class="panel" id="panel-konnect">
+      <div class="section-label">Konnect</div>
+      <h1 class="section-title">Marketplace channel pricing</h1>
+      <p class="section-desc">Sell on Amazon, Myntra, Flipkart, Noon and 50+ platforms. Sync inventory and orders centrally.</p>
+      <div class="cards-row cols-3">
+        <div class="card"><div class="card-name">Access</div><div class="card-tagline">Included with any Commerce plan</div><div class="price-area"><div class="price-main"><span class="price-num free-price">Included</span></div></div><button class="card-btn btn-outline">Get started →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Connect 50+ marketplaces</li><li><span class="feat-tick">✓</span> Real-time inventory sync</li></ul></div>
+        <div class="card featured"><div class="badge-pop">Per order</div><div class="card-name">Transaction fee</div><div class="card-tagline">On marketplace orders placed</div><div class="price-area"><div class="price-main"><span class="price-sym">₹</span><span class="price-num">2</span><span class="price-per">/order</span></div><div class="price-annual">1 commerce credit per order</div></div><button class="card-btn btn-dark">Enable Konnect →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> AI catalog management (PIM)</li><li><span class="feat-tick">✓</span> ERP/WMS supply extensions</li></ul></div>
+        <div class="card"><div class="card-name">Enterprise</div><div class="card-tagline">Volume discounts</div><div class="price-area"><div class="price-main"><span class="price-num free-price">Custom</span></div></div><button class="card-btn btn-outline">Talk to sales →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Competitive per-order rates</li><li><span class="feat-tick">✓</span> Dedicated integration team</li></ul></div>
+      </div>
+    </div>
+
+    <!-- ─── MANAGED LOGISTICS ─── -->
+    <div class="panel" id="panel-logistics">
+      <div class="section-label">Managed Logistics</div>
+      <h1 class="section-title">Logistics pricing</h1>
+      <p class="section-desc">Credit-based. 1 credit = ₹1. Includes NDR automation and shipment insurance. India only.</p>
+      <div class="cards-row cols-3">
+        <div class="card"><div class="card-name">Free trial</div><div class="card-tagline">Start with free credits</div><div class="price-area"><div class="price-main"><span class="price-num">500</span><span class="price-per"> credits</span></div><div class="price-annual">Free on trial plan</div></div><button class="card-btn btn-outline">Start free →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> 50 free ETA lookups</li><li><span class="feat-tick">✓</span> NDR automation</li><li><span class="feat-tick">✓</span> Insurance up to ₹2,500</li></ul></div>
+        <div class="card featured"><div class="badge-pop">Pay as you go</div><div class="card-name">All paid plans</div><div class="card-tagline">Charged as per actuals</div><div class="price-area"><div class="price-main"><span class="price-sym">₹</span><span class="price-num">1</span><span class="price-per">/credit</span></div><div class="price-annual">1 credit per AWB (fwd + return)</div></div><button class="card-btn btn-dark">Enable logistics →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> EDD by Fynd logistics</li><li><span class="feat-tick">✓</span> Shipment insurance</li><li><span class="feat-tick">✓</span> 100+ carrier integrations</li></ul></div>
+        <div class="card"><div class="card-name">Own carriers</div><div class="card-tagline">Use your own logistics accounts</div><div class="price-area"><div class="price-main"><span class="price-sym">₹</span><span class="price-num">1</span><span class="price-per">/credit</span></div><div class="price-annual">Available globally (excl. India)</div></div><button class="card-btn btn-outline">Configure →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Own carrier credentials</li><li><span class="feat-tick">✓</span> All logistics apps</li></ul></div>
+      </div>
+    </div>
+
+    <!-- ─── AI STUDIO ─── -->
+    <div class="panel" id="panel-ai">
+      <div class="section-label">AI Studio</div>
+      <h1 class="section-title">AI Studio pricing</h1>
+      <p class="section-desc">Generate studio-quality visuals for your entire catalog. Credit-based — pay only for what you create.</p>
+      <div class="cards-row cols-3">
+        <div class="card"><div class="card-name">Free</div><div class="card-tagline">Try with free credits</div><div class="price-area"><div class="price-main"><span class="price-num">100</span><span class="price-per"> credits</span></div><div class="price-annual">Included with all plans</div></div><button class="card-btn btn-outline">Try now →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Image transformation (1 credit)</li><li><span class="feat-tick">✓</span> Image generation (2 credits)</li><li><span class="feat-tick">✓</span> Video generation (2 credits/sec)</li></ul></div>
+        <div class="card featured"><div class="badge-pop">Per credit</div><div class="card-name">Pay as you go</div><div class="card-tagline">Top up anytime</div><div class="price-area"><div class="price-main"><span class="price-sym">₹</span><span class="price-num">50</span><span class="price-per">/credit</span></div><div class="price-annual">$0.50 USD · bulk discounts available</div></div><button class="card-btn btn-dark">Buy credits →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Studio-quality product photos</li><li><span class="feat-tick">✓</span> Background removal &amp; replacement</li><li><span class="feat-tick">✓</span> AI model generation</li><li><span class="feat-tick">✓</span> Product video generation</li></ul></div>
+        <div class="card"><div class="card-name">Enterprise</div><div class="card-tagline">Volume credit bundles</div><div class="price-area"><div class="price-main"><span class="price-num free-price">Custom</span></div></div><button class="card-btn btn-outline">Talk to sales →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Bulk credit packs</li><li><span class="feat-tick">✓</span> API access for automation</li></ul></div>
+      </div>
+    </div>
+
+    <!-- ─── OMS / WMS ─── -->
+    <div class="panel" id="panel-oms">
+      <div class="section-label">OMS / WMS</div>
+      <h1 class="section-title">Order &amp; warehouse management</h1>
+      <p class="section-desc">Centralize orders from all channels. Streamline warehouse operations from receiving to dispatch.</p>
+      <div class="cards-row cols-3">
+        <div class="card"><div class="card-name">Starter</div><div class="card-tagline">Basic order management</div><div class="price-area"><div class="price-main"><span class="price-num free-price">Included</span></div><div class="price-annual">With Commerce platform</div></div><button class="card-btn btn-outline">Get started →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Standard order routing</li><li><span class="feat-tick">✓</span> Return management</li><li><span class="feat-tick">✓</span> Basic reports</li></ul></div>
+        <div class="card featured"><div class="badge-pop">Most popular</div><div class="card-name">Professional</div><div class="card-tagline">Advanced routing &amp; automation</div><div class="price-area"><div class="price-main"><span class="price-num free-price">Included</span></div><div class="price-annual">With Professional plan</div></div><button class="card-btn btn-dark">Upgrade plan →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Custom order routing</li><li><span class="feat-tick">✓</span> Stock movement &amp; PO</li><li><span class="feat-tick">✓</span> ERP/WMS integration</li></ul></div>
+        <div class="card"><div class="card-name">Enterprise</div><div class="card-tagline">Full WMS &amp; TMS</div><div class="price-area"><div class="price-main"><span class="price-num free-price">Custom</span></div></div><button class="card-btn btn-outline">Talk to sales →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Full warehouse management</li><li><span class="feat-tick">✓</span> Transport management (TMS)</li><li><span class="feat-tick">✓</span> Advanced fulfilment automation</li></ul></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER NOTE -->
+<div class="footer-note" style="background:var(--white);border-top:1px solid var(--border);padding:18px 48px;font-size:12px;color:var(--gray-400);text-align:center">
+  * All prices exclude GST/local taxes · 1 Order Credit = 1 INR · Transaction fees exclusive of payment gateway charges
+</div>
+
+<script>
+/* ─── TABLE DATA ──────────────────────────────────────────────────── */
+const T = [
+  { g:'STOREFRONT & COMMERCE', rows:[
+    ['Storefronts',               '1',        '1',       '1',        '5+'],
+    ['Fulfillment locations',     '1',        '10',      '20',       'Custom'],
+    ['Brands',                    '1',        '1',       '1',        'Unlimited'],
+    ['Staff accounts',            '3 users',  '✓',       '✓',        '✓'],
+    ['Payment gateways',          '—',        '✓',       '✓',        '✓'],
+    ['Product bundles',           '—',        '✓',       '✓',        '✓'],
+    ['Return & refund mgmt',      '✓',        '✓',       '✓',        '✓'],
+    ['Custom domain',             '—',        '✓',       '✓',        '✓'],
+    ['Ask Fynd AI',               '✓',        '✓',       '✓',        '✓'],
+    ['Reports & dashboards',      '✓',        '✓',       '✓',        '✓'],
+    ['Offers & coupons',          '—',        '✓',       '✓',        '✓'],
+  ]},
+  { g:'OMNICHANNEL', rows:[
+    ['BOPIS & Quick commerce',    '—',        '—',       '✓',        '✓'],
+    ['Offline POS',               '—',        '—',       'Add-on',   '✓'],
+    ['Map-based shipping zones',  '—',        '—',       '✓',        '✓'],
+    ['Custom order routing',      '—',        '—',       '—',        '✓'],
+    ['Endless aisle',             '—',        '—',       '✓',        '✓'],
+    ['Barcode printing',          '—',        '—',       '✓',        '✓'],
+    ['In-store EDC payments',     '—',        '—',       '✓',        '✓'],
+  ]},
+  { g:'MARKETING', rows:[
+    ['Customer groups',           '✓',        '✓',       '✓',        '✓'],
+    ['Loyalty (Fynd Engage)',     '—',        '—',       '✓',        '✓'],
+    ['Email & SMS campaigns',     '—',        '—',       '✓',        '✓'],
+    ['Rich customer profile',     '—',        '—',       '✓',        '✓'],
+    ['Merchandising rules',       '—',        '—',       '—',        '✓'],
+    ['Complex offer rules',       '—',        '—',       '—',        '✓'],
+  ]},
+  { g:'PLATFORM & INTEGRATIONS', rows:[
+    ['Webhook & API access',      '—',        'w/o PII', 'Full',     'Full'],
+    ['Sell on marketplaces',      '—',        '✓',       '✓',        '✓'],
+    ['Geo pricing zones',         '—',        '3',       '3',        '50'],
+    ['Redirection rules',         '—',        '—',       '✓',        '✓'],
+    ['Social login',              '—',        '—',       '✓',        '✓'],
+  ]},
+  { g:'ENTERPRISE', rows:[
+    ['B2B storefront',            '—',        '—',       '—',        '✓'],
+    ['Multi-seller marketplace',  '—',        '—',       '—',        '✓'],
+    ['Custom checkout',           '—',        '—',       '—',        '✓'],
+    ['Sandbox storefront',        '—',        '—',       '—',        '✓'],
+    ['Custom analytics',          '—',        '—',       '—',        '✓'],
+    ['Dedicated account manager', '—',        '—',       '—',        '✓'],
+  ]},
+  { g:'SUPPORT', rows:[
+    ['Training & setup',          'Docs',     'Docs',    'Docs + Chat','+ KAM + Onsite'],
+    ['24x7 support',              'Self-serve','Chat',   'Chat & Ticket','Priority AM'],
+  ]},
+];
+
+function cell(v) {
+  if(v==='✓') return `<span class="c-yes">✓</span>`;
+  if(v==='—') return `<span class="c-no">—</span>`;
+  if(v==='Add-on') return `<span class="c-add">Add-on</span>`;
+  if(v==='Custom') return `<span class="c-cus">Custom</span>`;
+  return `<span class="c-txt">${v}</span>`;
+}
+function buildTable(id) {
+  const b = document.getElementById(id); if(!b) return;
+  b.innerHTML = '';
+  T.forEach(group => {
+    const hr = document.createElement('tr');
+    hr.className = 'cat-tr'; hr.dataset.g = group.g;
+    hr.innerHTML = `<td colspan="5">${group.g}</td>`;
+    hr.onclick = function() {
+      const c = this.classList.toggle('closed');
+      b.querySelectorAll(`[data-gm="${group.g}"]`).forEach(r => r.style.display = c ? 'none' : '');
+    };
+    b.appendChild(hr);
+    group.rows.forEach(([f,fr,st,pr,en]) => {
+      const r = document.createElement('tr');
+      r.dataset.gm = group.g;
+      r.innerHTML = `<td>${f}</td><td>${cell(fr)}</td><td>${cell(st)}</td><td>${cell(pr)}</td><td>${cell(en)}</td>`;
+      b.appendChild(r);
+    });
+  });
+}
+buildTable('tbl-platform');
+
+/* ─── BILLING TOGGLE ──────────────────────────────────────────────── */
+let mode = 'annual';
+function setBilling(m) {
+  mode = m;
+  document.getElementById('btn-a').classList.toggle('on', m==='annual');
+  document.getElementById('btn-m').classList.toggle('on', m==='monthly');
+  document.querySelectorAll('.pp').forEach(el => el.textContent = m==='annual' ? el.dataset.a : el.dataset.m);
+  document.querySelectorAll('.pq').forEach(el => el.textContent = m==='annual' ? el.dataset.a : el.dataset.m);
+  document.querySelectorAll('.ps').forEach(el => el.textContent = m==='annual' ? el.dataset.a : el.dataset.m);
+}
+
+/* ─── LEFT NAV SWITCHER ───────────────────────────────────────────── */
+const PANEL_LABELS = {
+  platform:   'Customer Platform',
+  free:       'Free Tools',
+  bundle:     'Create a Bundle',
+  smb:        'Fynd for SMBs',
+  storefront: 'Storefront',
+  pos:        'Store OS / POS',
+  konnect:    'Konnect',
+  logistics:  'Managed Logistics',
+  ai:         'AI Studio',
+  oms:        'OMS / WMS',
+};
+
+function show(id) {
+  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
+  const nl = document.getElementById(`nl-${id}`);
+  if(nl) nl.classList.add('active');
+  const p = document.getElementById(`panel-${id}`);
+  if(p) p.classList.add('active');
+  const chip = document.getElementById('js-current-section');
+  if(chip && PANEL_LABELS[id]) chip.textContent = PANEL_LABELS[id];
+  closeDrawer();
+  document.getElementById('main-content').scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+/* ─── ADD-ON TOGGLES ──────────────────────────────────────────────── */
+function toggleAddon(id) {
+  const c = document.getElementById(`ao-${id}`);
+  if(!c) return;
+  const on = c.classList.toggle('on');
+  c.querySelector('.addon-btn').textContent = on ? '✓ Added' : '+ Add';
+}
+
+/* ─── MOBILE DRAWER ───────────────────────────────────────────────── */
+function toggleDrawer() {
+  const open = document.body.classList.toggle('drawer-open');
+  const btn = document.getElementById('js-hamburger');
+  if(btn) btn.setAttribute('aria-expanded', String(open));
+}
+function closeDrawer() {
+  document.body.classList.remove('drawer-open');
+  const btn = document.getElementById('js-hamburger');
+  if(btn) btn.setAttribute('aria-expanded', 'false');
+}
+document.addEventListener('keydown', function(e) {
+  if(e.key === 'Escape' && document.body.classList.contains('drawer-open')) closeDrawer();
+});
+/* Close drawer if viewport grows past mobile breakpoint */
+window.addEventListener('resize', function() {
+  if(window.innerWidth > 991 && document.body.classList.contains('drawer-open')) closeDrawer();
+});
+</script>
+
+</body>
+</html>
