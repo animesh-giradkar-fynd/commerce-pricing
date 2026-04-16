@@ -4,11 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fynd — Pricing</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-<!-- Satoshi: closest free proxy for Fynd Sans (Fynd's proprietary heading typeface) -->
-<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.prod.website-files.com" crossorigin>
+<style>
+  /* Fynd Sans + Inter Display — hotlinked from Fynd's own Webflow CDN
+     (same @font-face sources that fynd.com serves). Fynd Sans ships one
+     weight (400, heavy display by design); heavier runs fall through to
+     Inter Display's 500-700 weights automatically. */
+  @font-face{font-family:'Fynd Sans';src:url(https://cdn.prod.website-files.com/67a9c8e5f2c74ac8c2c9b88b/67a9c8e5f2c74ac8c2c9b891_FyndSans.otf) format('opentype');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'Inter Display';src:url(https://cdn.prod.website-files.com/67a9c8e5f2c74ac8c2c9b88b/67af15a5b48edc18a2462d39_InterDisplay-Regular.ttf) format('truetype');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'Inter Display';src:url(https://cdn.prod.website-files.com/67a9c8e5f2c74ac8c2c9b88b/67af15a544b2b3387edb4352_InterDisplay-Medium.ttf) format('truetype');font-weight:500;font-style:normal;font-display:swap}
+  @font-face{font-family:'Inter Display';src:url(https://cdn.prod.website-files.com/67a9c8e5f2c74ac8c2c9b88b/67af15a50cc2af6e5410e847_InterDisplay-SemiBold.ttf) format('truetype');font-weight:600;font-style:normal;font-display:swap}
+  @font-face{font-family:'Inter Display';src:url(https://cdn.prod.website-files.com/67a9c8e5f2c74ac8c2c9b88b/67af15a5171d8da335ba36df_InterDisplay-ExtraBold.ttf) format('truetype');font-weight:700;font-style:normal;font-display:swap}
+</style>
 <style>
 
 /* ─── FYND DESIGN TOKENS ─────────────────────────────────────────── */
@@ -41,10 +48,11 @@
   --border-light: #EBEBЕ4;
 
   /* Typography */
-  /* Body: Inter — same family Fynd uses as "Inter Display" secondary
-     Headings: Satoshi — closest free proxy for Fynd's proprietary "Fynd Sans" */
-  --font:         'Satoshi', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display: 'Satoshi', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Matches fynd.com exactly: Fynd Sans (primary display) + Inter Display (body).
+     Fynd Sans is the real proprietary typeface, loaded from Fynd's Webflow CDN
+     above. Inter Display picks up weights 400-700 where Fynd Sans only ships 400. */
+  --font:         'Fynd Sans', 'Inter Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Fynd Sans', 'Inter Display', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Layout */
   --nav-w:        240px;
@@ -222,15 +230,29 @@ body.drawer-open { overflow: hidden; }
 .panel.active { display: block; }
 
 /* ─── PROMO BANNER ────────────────────────────────────────────────── */
+/* Compact inline chip — sits above the hero, single-line, auto-width */
 .promo-banner {
+  display: inline-flex; align-items: center; gap: 10px;
   border: 1px solid #C8D9F8;
   background: #EEF4FF;
-  border-radius: 10px;
-  padding: 14px 18px;
-  margin-bottom: 28px;
+  border-radius: 100px;
+  padding: 6px 14px 6px 12px;
+  margin: 0 auto 20px;
+  max-width: 100%;
 }
-.promo-banner b { color: #1E40AF; font-weight: 600; font-size: 14px; }
-.promo-banner p { color: #3B5BD4; font-size: 13px; margin-top: 3px; line-height: 1.5; }
+.promo-banner-wrap { text-align: center; }
+.promo-banner b {
+  color: #1E40AF; font-weight: 600; font-size: 12px;
+  white-space: nowrap;
+  background: rgba(30,64,175,.1);
+  padding: 2px 8px; border-radius: 100px;
+  letter-spacing: .01em;
+}
+.promo-banner span { color: #3B5BD4; font-size: 12.5px; line-height: 1.3; }
+@media (max-width: 479px) {
+  .promo-banner { flex-direction: column; align-items: center; gap: 4px; border-radius: 14px; padding: 8px 14px; }
+  .promo-banner span { text-align: center; }
+}
 
 /* ─── SECTION HEAD ────────────────────────────────────────────────── */
 /* Centered hero treatment, Shopify-inspired ("You've got plans. Us too.") */
@@ -449,10 +471,50 @@ td:not(:first-child) { text-align: center; color: var(--black); }
 .cta-pill-secondary a:hover { border-color: var(--accent-start); }
 .cta-pill-secondary .dot { color: var(--gray-300); }
 
+/* ─── HERO START PILL (Shopify-style email + CTA) ─────────────────── */
+.hero-start-pill {
+  display: inline-flex; align-items: center;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 5px 5px 5px 22px;
+  box-shadow: 0 2px 16px rgba(0,0,0,.06);
+  width: 100%; max-width: 480px;
+}
+.hero-start-input {
+  flex: 1; min-width: 0;
+  font-family: var(--font); font-size: 14px;
+  color: var(--black); background: transparent;
+  border: none; outline: none;
+  padding: 10px 0;
+}
+.hero-start-input::placeholder { color: var(--gray-400); }
+.hero-start-btn {
+  background: var(--black); color: var(--white);
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  padding: 10px 22px; border-radius: 100px;
+  white-space: nowrap; border: none; cursor: pointer;
+  transition: background .15s;
+}
+.hero-start-btn:hover { background: var(--gray-700); }
+.hero-fine-print {
+  font-size: 13px; color: var(--gray-400);
+  margin: 0; text-align: center;
+}
+.hero-fine-print a {
+  color: var(--gray-700); font-weight: 500;
+  border-bottom: 1px solid var(--border);
+  transition: color .14s, border-color .14s;
+}
+.hero-fine-print a:hover { color: var(--black); border-color: var(--gray-400); }
+
 @media (max-width: 479px) {
   .cta-pill { flex-direction: column; gap: 8px; padding: 12px; border-radius: 16px; }
   .cta-pill-label { white-space: normal; text-align: center; }
   .cta-pill-btn { width: 100%; text-align: center; }
+  .hero-start-pill { flex-direction: column; gap: 8px; padding: 12px; border-radius: 16px; }
+  .hero-start-input { padding: 10px 12px; width: 100%; }
+  .hero-start-btn { width: 100%; text-align: center; }
 }
 
 /* ─── SALES NUDGE (Enterprise CTA stack + bottom nudge bar) ──────── */
@@ -777,23 +839,29 @@ body.drawer-open .nav-backdrop {
     <!-- ─── CUSTOMER PLATFORM (default) ─── -->
     <div class="panel active" id="panel-platform">
 
-      <div class="promo-banner">
-        <b>Save up to 20% on annual plans</b>
-        <p>Get Starter now: ₹1,199/mo (was ₹1,499) billed annually.</p>
+      <div class="promo-banner-wrap">
+        <div class="promo-banner">
+          <b>Save 20%</b>
+          <span>Starter ₹1,199/mo (was ₹1,499) on annual billing</span>
+        </div>
       </div>
 
-      <div class="section-label">Customer Platform</div>
       <h1 class="section-title">Fynd your fit.</h1>
       <p class="section-desc">
-        Five plans. Every channel. Pick what you actually need — we'll grow with you.
+        Four plans. Every channel. Pick what you actually need — we'll grow with you.
       </p>
 
-      <!-- HERO CTA PILL — existing-user nudges (Shopify-inspired) -->
+      <!-- HERO CTA — Shopify-style email + button pill (primary) -->
       <div class="cta-pill-section">
-        <div class="cta-pill">
-          <span class="cta-pill-label">Already on Fynd?</span>
-          <a href="https://platform.fynd.com" class="cta-pill-btn" target="_blank" rel="noopener">Sign in to console →</a>
-        </div>
+        <form class="hero-start-pill" onsubmit="return heroStart(event)">
+          <input type="email" name="email" class="hero-start-input"
+                 placeholder="Enter your work email" required
+                 autocomplete="email" aria-label="Work email" />
+          <button type="submit" class="hero-start-btn">Get started</button>
+        </form>
+        <p class="hero-fine-print">
+          Already on Fynd? <a href="https://platform.fynd.com" target="_blank" rel="noopener">Sign in to console →</a>
+        </p>
         <div class="cta-pill-secondary">
           <a href="#" onclick="document.querySelector('.compare-wrap').scrollIntoView({behavior:'smooth',block:'start'});return false;">Explore features</a>
           <span class="dot">·</span>
@@ -940,62 +1008,6 @@ body.drawer-open .nav-backdrop {
               </thead>
               <tbody id="tbl-platform"></tbody>
             </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add-ons -->
-      <div class="addons-section">
-        <div class="addons-title">Add-on services</div>
-        <div class="addons-sub">Available on all plans — pay only for what you use</div>
-        <div class="addons-grid">
-          <div class="addon" id="ao-pos">
-            <div class="addon-name">Store OS / POS</div>
-            <div class="addon-desc">Full POS for physical stores. Offline mode, barcode printing, EDC payments.</div>
-            <div class="addon-foot">
-              <div class="addon-price">From <strong>₹2,500/location/yr</strong></div>
-              <button class="addon-btn" onclick="toggleAddon('pos')">+ Add</button>
-            </div>
-          </div>
-          <div class="addon" id="ao-ai">
-            <div class="addon-name">AI Studio</div>
-            <div class="addon-desc">Studio-quality product photos, video, background removal. Credit-based.</div>
-            <div class="addon-foot">
-              <div class="addon-price">From <strong>₹50/credit</strong></div>
-              <button class="addon-btn" onclick="toggleAddon('ai')">+ Add</button>
-            </div>
-          </div>
-          <div class="addon" id="ao-logistics">
-            <div class="addon-name">Managed Logistics</div>
-            <div class="addon-desc">End-to-end fulfillment, NDR automation, shipment insurance. India only.</div>
-            <div class="addon-foot">
-              <div class="addon-price">From <strong>₹1/credit</strong></div>
-              <button class="addon-btn" onclick="toggleAddon('logistics')">+ Add</button>
-            </div>
-          </div>
-          <div class="addon" id="ao-boltic">
-            <div class="addon-name">Commerce Automation</div>
-            <div class="addon-desc">No-code workflow builder. Connect tools and automate operations.</div>
-            <div class="addon-foot">
-              <div class="addon-price"><strong>Paid service</strong></div>
-              <button class="addon-btn" onclick="toggleAddon('boltic')">+ Add</button>
-            </div>
-          </div>
-          <div class="addon" id="ao-kaily">
-            <div class="addon-name">Kaily AI Agent</div>
-            <div class="addon-desc">Conversational commerce for WhatsApp &amp; web. Automate sales &amp; support.</div>
-            <div class="addon-foot">
-              <div class="addon-price"><strong>Paid service</strong></div>
-              <button class="addon-btn" onclick="toggleAddon('kaily')">+ Add</button>
-            </div>
-          </div>
-          <div class="addon" id="ao-konnect">
-            <div class="addon-name">Konnect Marketplaces</div>
-            <div class="addon-desc">Sell on Amazon, Myntra, Flipkart, Noon and 50+ with real-time sync.</div>
-            <div class="addon-foot">
-              <div class="addon-price"><strong>Per-order transaction fee</strong></div>
-              <button class="addon-btn" onclick="toggleAddon('konnect')">+ Add</button>
-            </div>
           </div>
         </div>
       </div>
