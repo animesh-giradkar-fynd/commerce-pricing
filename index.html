@@ -16,10 +16,17 @@
   --page-bg:      #F5F5F2;          /* very warm off-white — exact HubSpot sidebar bg */
   --nav-bg:       #F5F5F2;
   --content-bg:   #FFFFFF;
-  --green:        #00B140;          /* Fynd primary green */
+  --green:        #00B140;          /* Fynd primary green — kept for semantic checkmarks + Save 20% */
   --green-dark:   #00923A;
   --green-tint:   #E8F7EE;
   --green-mid:    #00973A;
+  /* Fynd AI accent — sourced from fynd.com "AI for commerce" pill gradient */
+  --accent-start: #4E52F2;          /* Electric indigo */
+  --accent-mid:   #6E5CF5;          /* Mid-stop for solid accent */
+  --accent-end:   #DD9DFF;          /* Soft violet */
+  --accent-dark:  #3A3DD9;          /* Darker hover */
+  --accent-tint:  #EEEDFF;          /* Light backdrop for badges/featured tint */
+  --accent-grad:  linear-gradient(90deg, #4E52F2 0%, #8B7BFF 55%, #DD9DFF 100%);
   --gray-100:     #F0F0EC;
   --gray-200:     #E4E4DE;
   --gray-300:     #CACAC2;
@@ -216,7 +223,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 /* ─── SECTION HEAD ────────────────────────────────────────────────── */
 .section-label {
   font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .08em; color: var(--green-mid); margin-bottom: 6px;
+  letter-spacing: .08em; color: var(--accent-mid); margin-bottom: 6px;
 }
 .section-title {
   font-size: 28px; font-weight: 700; letter-spacing: -.6px;
@@ -227,10 +234,10 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   max-width: 560px; line-height: 1.55;
 }
 .section-desc a {
-  color: var(--green-mid); font-weight: 500;
-  border-bottom: 1px solid rgba(0,151,58,.28);
+  color: var(--accent-mid); font-weight: 500;
+  border-bottom: 1px solid rgba(78,82,242,.28);
 }
-.section-desc a:hover { border-color: var(--green); }
+.section-desc a:hover { border-color: var(--accent-start); }
 
 /* ─── CARDS GRID ──────────────────────────────────────────────────── */
 .cards-row {
@@ -240,6 +247,14 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   margin-bottom: 40px;
 }
 .cards-row.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cards-row.cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.cards-row.cols-5 .card { padding: 18px 16px 16px; }
+.cards-row.cols-5 .card-name { font-size: 16px; }
+.cards-row.cols-5 .card-tagline { font-size: 11px; margin-bottom: 14px; }
+.cards-row.cols-5 .price-num { font-size: 28px; letter-spacing: -.6px; }
+.cards-row.cols-5 .price-num.free-price { font-size: 22px; }
+.cards-row.cols-5 .feat-list li { font-size: 11.5px; }
+.cards-row.cols-5 .card-btn { padding: 9px 12px; font-size: 12.5px; }
 
 /* ─── PLAN CARD ───────────────────────────────────────────────────── */
 .card {
@@ -251,15 +266,22 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   transition: box-shadow .2s;
 }
 .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); }
-.card.featured { border: 2px solid var(--green); }
+.card.featured {
+  border: 2px solid transparent;
+  /* Gradient border via dual background trick — matches fynd.com AI pill */
+  background:
+    linear-gradient(var(--white), var(--white)) padding-box,
+    var(--accent-grad) border-box;
+}
 
 .badge-pop {
   display: inline-flex; align-items: center; gap: 5px;
   font-size: 11px; font-weight: 600; letter-spacing: .02em;
-  color: var(--green-mid); background: var(--green-tint);
-  border: 1px solid rgba(0,150,58,.18);
+  color: var(--accent-mid); background: var(--accent-tint);
+  border: 1px solid rgba(78,82,242,.18);
   padding: 3px 10px; border-radius: 100px; margin-bottom: 10px;
 }
+.badge-pop svg path { fill: var(--accent-start); }
 
 .card-name { font-size: 18px; font-weight: 700; color: var(--black); margin-bottom: 3px; }
 .card-tagline { font-size: 12px; color: var(--gray-400); margin-bottom: 18px; line-height: 1.4; }
@@ -319,11 +341,21 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 
 /* ─── COMPARE TABLE ───────────────────────────────────────────────── */
 .compare-wrap { margin-top: 4px; }
+.compare-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
+}
 .compare-title {
   font-size: 20px; font-weight: 700; letter-spacing: -.4px;
   color: var(--black); margin-bottom: 4px;
 }
-.compare-sub { font-size: 13px; color: var(--gray-400); margin-bottom: 16px; }
+.compare-sub { font-size: 13px; color: var(--gray-400); }
+.compare-sub a {
+  color: var(--accent-mid); font-weight: 500; margin-left: 6px;
+  border-bottom: 1px solid rgba(78,82,242,.28);
+  transition: border-color .14s;
+}
+.compare-sub a:hover { border-color: var(--accent-start); }
 
 .tbl-outer {
   border: 1px solid var(--border);
@@ -338,7 +370,7 @@ thead th {
   background: var(--gray-100); border-bottom: 1px solid var(--border);
 }
 thead th:not(:first-child) { text-align: center; color: var(--black); font-size: 13px; }
-.th-green { color: var(--green-mid) !important; }
+.th-green { color: var(--accent-mid) !important; }
 tbody tr { border-bottom: 1px solid var(--border-light); }
 tbody tr:last-child { border-bottom: none; }
 tbody tr:nth-child(even):not(.cat-tr) { background: #FAFAF8; }
@@ -364,6 +396,48 @@ td:not(:first-child) { text-align: center; color: var(--black); }
 .c-add { font-size: 11px; font-weight: 500; color: #9A5800; background: #FFF3D0; padding: 2px 7px; border-radius: 4px; display: inline-block; }
 .c-txt { font-size: 12px; }
 .c-cus { font-size: 12px; color: var(--gray-400); font-style: italic; }
+
+/* ─── SALES NUDGE (Enterprise CTA stack + bottom nudge bar) ──────── */
+.cta-stack { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.cta-stack .card-btn { margin-bottom: 0; }
+.cta-secondary {
+  display: inline-block;
+  font-size: 12px; font-weight: 500;
+  color: var(--gray-500);
+  text-align: center;
+  padding: 4px 0;
+  transition: color .14s;
+}
+.cta-secondary:hover { color: var(--accent-mid); }
+
+.nudge-bar {
+  margin-top: 32px;
+  padding: 18px 22px;
+  background: var(--gray-100);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex; align-items: center; gap: 14px;
+  flex-wrap: wrap;
+}
+.nudge-bar-text { font-size: 13px; color: var(--gray-700); flex: 1; min-width: 200px; }
+.nudge-bar-text strong { color: var(--black); font-weight: 600; }
+.nudge-bar-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.nudge-bar-link {
+  font-size: 13px; font-weight: 500; color: var(--accent-mid);
+  border-bottom: 1px solid rgba(78,82,242,.28);
+  transition: border-color .14s;
+}
+.nudge-bar-link:hover { border-color: var(--accent-start); }
+
+.cross-nudge {
+  display: inline-block;
+  font-size: 11px; font-weight: 500;
+  color: var(--accent-mid);
+  margin-top: 6px;
+  border-bottom: 1px dashed rgba(78,82,242,.32);
+  transition: border-color .14s;
+}
+.cross-nudge:hover { border-bottom-style: solid; }
 
 /* ─── ADD-ONS ─────────────────────────────────────────────────────── */
 .addons-section { margin-top: 48px; }
@@ -479,11 +553,23 @@ body.drawer-open .nav-backdrop {
 /* ─── RESPONSIVE BREAKPOINTS ─────────────────────────────────────── */
 /* Aligned with Webflow defaults: 991 / 767 / 479 */
 
+/* 5-col grid → 3-col below 1200px */
+@media (max-width: 1199px) {
+  .cards-row.cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cards-row.cols-5 .card { padding: 22px 20px 20px; }
+  .cards-row.cols-5 .price-num { font-size: 32px; }
+}
+
 /* Tablet portrait & smaller — narrower content */
 @media (max-width: 1100px) {
   .cards-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cards-row.cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .main { padding: 36px 36px 64px; }
+}
+
+/* 5-col grid → 2-col below 992px (matches main grid drop) */
+@media (max-width: 991px) {
+  .cards-row.cols-5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ≤991px — sidebar becomes hamburger drawer */
@@ -561,7 +647,7 @@ body.drawer-open .nav-backdrop {
 
 /* ≤479px — mobile portrait */
 @media (max-width: 479px) {
-  .cards-row, .cards-row.cols-3 { grid-template-columns: 1fr; }
+  .cards-row, .cards-row.cols-3, .cards-row.cols-5 { grid-template-columns: 1fr; }
   .main { padding: 24px 16px 48px; }
   .billing-bar {
     padding-left: 16px; padding-right: 16px;
@@ -685,41 +771,41 @@ body.drawer-open .nav-backdrop {
       </div>
 
       <div class="section-label">Customer Platform</div>
-      <h1 class="section-title">Everything you need to sell, bundled</h1>
+      <h1 class="section-title">Fynd your fit.</h1>
       <p class="section-desc">
-        All Fynd products in one plan, discounted.
+        Five plans. Every channel. Pick what you actually need — we'll grow with you.
         <a href="#">Calculate your price →</a>
       </p>
 
-      <div class="cards-row" id="platform-cards">
+      <div class="cards-row cols-5" id="platform-cards">
 
-        <!-- FREE -->
-        <div class="card">
-          <div class="card-name">Free</div>
-          <div class="card-tagline">Foundational tools to get you started. No credit card required.</div>
+        <!-- FREE TRIAL -->
+        <div class="card" data-api-key="plan_free_trial">
+          <div class="card-name">Free Trial</div>
+          <div class="card-tagline">30 days free. Try every Growth feature. No credit card required.</div>
           <div class="price-area">
             <div class="price-eyebrow">Price</div>
             <div class="price-main">
               <span class="price-num free-price">₹0</span>
-              <span class="price-per">/month</span>
+              <span class="price-per">/30 days</span>
             </div>
-            <div class="price-annual">Free for up to 3 users</div>
+            <div class="price-annual">Then choose a plan · 0% transaction fee</div>
           </div>
-          <button class="card-btn btn-outline">Get started free</button>
+          <button class="card-btn btn-outline">Start free trial →</button>
           <div class="feat-heading">Includes</div>
           <ul class="feat-list">
-            <li><span class="feat-tick">✓</span> 1 storefront</li>
-            <li><span class="feat-tick">✓</span> Basic order management</li>
+            <li><span class="feat-tick">✓</span> 1 storefront · 1 location</li>
             <li><span class="feat-tick">✓</span> Ask Fynd AI</li>
+            <li><span class="feat-tick">✓</span> Return &amp; refund mgmt</li>
             <li><span class="feat-tick">✓</span> Reports &amp; dashboards</li>
-            <li><span class="feat-tick">✓</span> 500 commerce credits</li>
+            <li><span class="feat-tick">✓</span> 50 free delivery ETAs</li>
           </ul>
         </div>
 
         <!-- STARTER -->
-        <div class="card">
+        <div class="card" data-api-key="plan_starter">
           <div class="card-name">Starter</div>
-          <div class="card-tagline">Essential commerce for new &amp; growing brands.</div>
+          <div class="card-tagline">Essential commerce for new &amp; growing D2C brands.</div>
           <div class="price-area">
             <div class="price-eyebrow">Starts at</div>
             <div class="price-main">
@@ -728,27 +814,27 @@ body.drawer-open .nav-backdrop {
               <span class="price-per pq" data-a="/year" data-m="/month">/year</span>
             </div>
             <div class="price-annual ps" data-a="₹1,499/month · billed annually" data-m="No annual commitment">₹1,499/month · billed annually</div>
-            <div class="price-note">30 days free · then ₹11/m for 3 months</div>
+            <div class="price-note">2.5% B2C transaction fee</div>
           </div>
           <button class="card-btn btn-outline">Start free trial →</button>
-          <div class="feat-heading">Includes</div>
+          <div class="feat-heading">Everything in Free Trial, plus:</div>
           <ul class="feat-list">
-            <li><span class="feat-tick">✓</span> 1 storefront · 10 locations</li>
+            <li><span class="feat-tick">✓</span> 10 fulfilment locations</li>
             <li><span class="feat-tick">✓</span> Payment gateways</li>
             <li><span class="feat-tick">✓</span> Custom domain</li>
-            <li><span class="feat-tick">✓</span> Sell on marketplaces</li>
-            <li><span class="feat-tick">✓</span> Return &amp; refund management</li>
-            <li><span class="feat-tick">✓</span> Staff accounts</li>
+            <li><span class="feat-tick">✓</span> Shipping zones &amp; rules</li>
+            <li><span class="feat-tick">✓</span> Product bundles &amp; coupons</li>
+            <li><span class="feat-tick">✓</span> 3 geography pricing zones</li>
           </ul>
         </div>
 
-        <!-- PROFESSIONAL (featured) -->
-        <div class="card featured">
+        <!-- GROWTH (featured) -->
+        <div class="card featured" data-api-key="plan_growth">
           <div class="badge-pop">
             <svg width="9" height="9" viewBox="0 0 9 9" aria-hidden="true"><path d="M4.5 1 5.6 3.5 8 3.8 6.2 5.5l.5 2.4L4.5 6.7 2.3 7.9l.5-2.4L1 3.8l2.4-.3z" fill="#00B140"/></svg>
             Most popular
           </div>
-          <div class="card-name">Professional</div>
+          <div class="card-name">Growth</div>
           <div class="card-tagline">For omnichannel retailers scaling online &amp; offline.</div>
           <div class="price-area">
             <div class="price-eyebrow">Starts at</div>
@@ -758,22 +844,50 @@ body.drawer-open .nav-backdrop {
               <span class="price-per pq" data-a="/year" data-m="/month">/year</span>
             </div>
             <div class="price-annual ps" data-a="₹2,999/month · billed annually" data-m="No annual commitment">₹2,999/month · billed annually</div>
+            <div class="price-note">2.0% B2C transaction fee</div>
           </div>
           <button class="card-btn btn-dark">Start free trial →</button>
           <div class="feat-heading">Everything in Starter, plus:</div>
           <ul class="feat-list">
-            <li><span class="feat-tick">✓</span> Quick commerce</li>
+            <li><span class="feat-tick">✓</span> Quick Commerce on Fynd</li>
+            <li><span class="feat-tick">✓</span> Map-based shipping zones</li>
             <li><span class="feat-tick">✓</span> Loyalty (Fynd Engage)</li>
             <li><span class="feat-tick">✓</span> Email &amp; SMS campaigns</li>
-            <li><span class="feat-tick">✓</span> Rich customer profile (AI)</li>
             <li><span class="feat-tick">✓</span> Full webhook &amp; API access</li>
-            <li><span class="feat-tick">✓</span> Map-based shipping zones</li>
-            <li><span class="feat-tick">✓</span> Offline POS (add-on)</li>
+            <li><span class="feat-tick">✓</span> Endless aisle &amp; barcode print</li>
           </ul>
+          <a href="#" class="cross-nudge" onclick="show('pos');return false;">Pair with Store OS / POS →</a>
         </div>
 
-        <!-- ENTERPRISE -->
-        <div class="card">
+        <!-- SCALE -->
+        <div class="card" data-api-key="plan_scale">
+          <div class="card-name">Scale</div>
+          <div class="card-tagline">For multi-store operators and high-volume merchants.</div>
+          <div class="price-area">
+            <div class="price-eyebrow">Starts at</div>
+            <div class="price-main">
+              <span class="price-sym">₹</span>
+              <span class="price-num pp" data-a="33,333" data-m="3,999">33,333</span>
+              <span class="price-per pq" data-a="/year" data-m="/month">/year</span>
+            </div>
+            <div class="price-annual ps" data-a="₹3,999/month · billed annually" data-m="No annual commitment">₹3,999/month · billed annually</div>
+            <div class="price-note">1.5% B2C transaction fee</div>
+          </div>
+          <button class="card-btn btn-outline">Start free trial →</button>
+          <div class="feat-heading">Everything in Growth, plus:</div>
+          <ul class="feat-list">
+            <li><span class="feat-tick">✓</span> Merchandising rules</li>
+            <li><span class="feat-tick">✓</span> Per-zone pricing overage</li>
+            <li><span class="feat-tick">✓</span> Custom shipping rules</li>
+            <li><span class="feat-tick">✓</span> Custom order routing</li>
+            <li><span class="feat-tick">✓</span> 3 zones included + overages</li>
+            <li><span class="feat-tick">✓</span> Priority support response</li>
+          </ul>
+          <a href="#" class="cross-nudge" onclick="show('logistics');return false;">Add Managed Logistics →</a>
+        </div>
+
+        <!-- ENTERPRISE — sales nudge only, no PLG -->
+        <div class="card" data-api-key="plan_enterprise">
           <div class="card-name">Enterprise</div>
           <div class="card-tagline">For large retail chains, marketplaces &amp; complex operations.</div>
           <div class="price-area">
@@ -781,35 +895,44 @@ body.drawer-open .nav-backdrop {
             <div class="price-main">
               <span class="price-num free-price">Custom</span>
             </div>
-            <div class="price-annual">From 0.25% transaction fee</div>
+            <div class="price-annual">Competitive rates · starts at 0.25%</div>
           </div>
-          <button class="card-btn btn-outline">Talk to sales →</button>
-          <div class="feat-heading">Everything in Professional, plus:</div>
+          <div class="cta-stack">
+            <button class="card-btn btn-dark">Book a demo →</button>
+            <a href="#" class="cta-secondary">or talk to sales →</a>
+          </div>
+          <div class="feat-heading">Everything in Scale, plus:</div>
           <ul class="feat-list">
             <li><span class="feat-tick">✓</span> B2B storefront</li>
-            <li><span class="feat-tick">✓</span> Multi-seller marketplace</li>
-            <li><span class="feat-tick">✓</span> Custom checkout experience</li>
+            <li><span class="feat-tick">✓</span> Build your marketplace</li>
             <li><span class="feat-tick">✓</span> Advanced clienteling + AI</li>
-            <li><span class="feat-tick">✓</span> Dedicated account manager</li>
             <li><span class="feat-tick">✓</span> Custom analytics</li>
+            <li><span class="feat-tick">✓</span> 50 geography zones</li>
+            <li><span class="feat-tick">✓</span> Dedicated KAM + onsite</li>
           </ul>
+          <a href="#" class="cross-nudge" onclick="show('oms');return false;">See OMS / WMS →</a>
         </div>
 
       </div>
 
       <!-- Compare table -->
       <div class="compare-wrap">
-        <div class="compare-title">Compare all features</div>
-        <div class="compare-sub">Full breakdown of what's included in each plan</div>
+        <div class="compare-head">
+          <div>
+            <div class="compare-title">Compare all features</div>
+            <div class="compare-sub">Tap a category to expand. <a href="#" id="js-expand-all" onclick="toggleAllCategories(event)">Expand all →</a></div>
+          </div>
+        </div>
         <div class="tbl-outer">
           <div class="tbl-scroll">
             <table>
               <thead>
                 <tr>
-                  <th style="width:36%">Feature</th>
-                  <th>Free</th>
+                  <th style="width:30%">Feature</th>
+                  <th>Free Trial</th>
                   <th>Starter</th>
-                  <th class="th-green">Professional</th>
+                  <th class="th-green">Growth</th>
+                  <th>Scale</th>
                   <th>Enterprise</th>
                 </tr>
               </thead>
@@ -868,10 +991,22 @@ body.drawer-open .nav-backdrop {
             <div class="addon-name">Konnect Marketplaces</div>
             <div class="addon-desc">Sell on Amazon, Myntra, Flipkart, Noon and 50+ with real-time sync.</div>
             <div class="addon-foot">
-              <div class="addon-price">From <strong>₹2/order</strong></div>
+              <div class="addon-price"><strong>Per-order transaction fee</strong></div>
               <button class="addon-btn" onclick="toggleAddon('konnect')">+ Add</button>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- SALES NUDGE BAR -->
+      <div class="nudge-bar">
+        <div class="nudge-bar-text">
+          <strong>Not sure which plan fits?</strong> Our team will walk you through Fynd live and recommend the right tier for your business.
+        </div>
+        <div class="nudge-bar-actions">
+          <a href="#" class="nudge-bar-link">Book a 20-min demo →</a>
+          <span style="color:var(--gray-300)">·</span>
+          <a href="#" class="nudge-bar-link">Chat with sales →</a>
         </div>
       </div>
     </div><!-- /panel-platform -->
@@ -1039,55 +1174,101 @@ body.drawer-open .nav-backdrop {
 
 <script>
 /* ─── TABLE DATA ──────────────────────────────────────────────────── */
+/* Sourced from Proposed_Commercial_for_Commerce.xlsx, Commerce tab,
+ * SIT=TRUE rows. Grouped by xlsx 'Group' column, ordered per ENUM sheet:
+ *   Pricing (skipped — shown in plan cards), Core Features, Hosting and
+ *   administration, Retail Store Technology, Marketing, Customization,
+ *   International, Fynd Marketplace Konnect (skipped — 0 SIT rows),
+ *   Logistics, Just for Enterprise, Customer Support.
+ * Columns: Free Trial, Starter, Growth, Scale, Enterprise. */
 const T = [
-  { g:'STOREFRONT & COMMERCE', rows:[
-    ['Storefronts',               '1',        '1',       '1',        '5+'],
-    ['Fulfillment locations',     '1',        '10',      '20',       'Custom'],
-    ['Brands',                    '1',        '1',       '1',        'Unlimited'],
-    ['Staff accounts',            '3 users',  '✓',       '✓',        '✓'],
-    ['Payment gateways',          '—',        '✓',       '✓',        '✓'],
-    ['Product bundles',           '—',        '✓',       '✓',        '✓'],
-    ['Return & refund mgmt',      '✓',        '✓',       '✓',        '✓'],
-    ['Custom domain',             '—',        '✓',       '✓',        '✓'],
-    ['Ask Fynd AI',               '✓',        '✓',       '✓',        '✓'],
-    ['Reports & dashboards',      '✓',        '✓',       '✓',        '✓'],
-    ['Offers & coupons',          '—',        '✓',       '✓',        '✓'],
+  { g:'CORE FEATURES', rows:[
+    ['Storefronts',                     '1',        '1',         '1',          '1',          '5+'],
+    ['Ask Fynd AI',                     '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Locations',                       '1',        '✓',         '✓',          '✓',          '✓'],
+    ['Fulfilment locations',            '1',        '10',        '10',         '10',         'Custom'],
+    ['Staff accounts',                  '3',        '✓',         '✓',          '✓',          '✓'],
+    ['Brands',                          '1',        '1',         '1',          '1',          'Unlimited'],
+    ['Product bundles',                 '—',        '✓',         '✓',          '✓',          '✓'],
+    ['Merchandising',                   '—',        '—',         '—',          '✓',          '✓'],
+    ['Refund management',               'Manual',   '✓',         '✓',          '✓',          '✓'],
+    ['Return management',               '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Return merchandise authorisation','✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Multiple delivery options',       '1',        '1',         '✓',          '✓',          '✓'],
+    ['Shipping zones',                  '—',        '✓',         '✓',          '✓',          '✓'],
+    ['Map-based shipping zones',        '—',        '—',         '✓',          '✓',          '✓'],
+    ['Standard shipping rules',         '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Custom shipping rules',           '—',        '—',         'Custom',     'Custom',     'Custom'],
+    ['Standard order routing rules',    '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Custom order routing rules',      '—',        '—',         'Custom',     'Custom',     'Custom'],
+    ['Payment gateways',                '—',        '✓',         '✓',          '✓',          '✓'],
+    ['Reports',                         '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Dashboards',                      '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Quick Commerce on Fynd',          '—',        '—',         '✓',          '✓',          '✓'],
+    ['E-Invoice (India)',               '—',        '1 cr/order','1 cr/order', '1 cr/order', '1 cr/order'],
   ]},
-  { g:'OMNICHANNEL', rows:[
-    ['BOPIS & Quick commerce',    '—',        '—',       '✓',        '✓'],
-    ['Offline POS',               '—',        '—',       'Add-on',   '✓'],
-    ['Map-based shipping zones',  '—',        '—',       '✓',        '✓'],
-    ['Custom order routing',      '—',        '—',       '—',        '✓'],
-    ['Endless aisle',             '—',        '—',       '✓',        '✓'],
-    ['Barcode printing',          '—',        '—',       '✓',        '✓'],
-    ['In-store EDC payments',     '—',        '—',       '✓',        '✓'],
+  { g:'HOSTING & ADMINISTRATION', rows:[
+    ['Custom domain',                   '—',        '✓',         '✓',          '✓',          '✓'],
+    ['Redirection rules',               '—',        '—',         '✓',          '✓',          '✓'],
+  ]},
+  { g:'RETAIL STORE TECHNOLOGY', rows:[
+    ['Ordering location',               '1',        '1',         '₹1,000/loc', '₹1,000/loc', '₹1,000/loc'],
+    ['POS per-location subscription',   '—',        '₹2,500/yr', '₹2,500/yr',  '₹2,500/yr',  '₹2,500/yr'],
+    ['POS users',                       '1',        '1',         '₹500/user',  '₹500/user',  '₹500/user'],
+    ['POS devices',                     '1',        '1',         '₹500/device','₹500/device','₹500/device'],
+    ['POS per-device subscription',     '₹2,500',   '₹2,500',    '₹2,500',     '₹2,500',     '₹2,500'],
+    ['Cash register management',        '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Barcode printing',                '—',        '—',         '✓',          '✓',          '✓'],
+    ['Basic clienteling',               '—',        '—',         '✓',          '✓',          '✓'],
+    ['Advanced clienteling',            '—',        '—',         '—',          '—',          '✓'],
+    ['Mixed cart (Takeaway + Delivery)','✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Endless aisle',                   '—',        '—',         '✓',          '✓',          '✓'],
+    ['Return to any store',             '—',        '—',         '—',          '—',          '✓'],
+    ['Digital invoices',                '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Connected apps',                  '—',        '—',         '—',          '—',          '✓'],
+    ['In-store integrated payments',    '—',        '—',         '✓',          '✓',          '✓'],
+    ['Purchase order & stock movement', '—',        '—',         '✓',          '✓',          '✓'],
   ]},
   { g:'MARKETING', rows:[
-    ['Customer groups',           '✓',        '✓',       '✓',        '✓'],
-    ['Loyalty (Fynd Engage)',     '—',        '—',       '✓',        '✓'],
-    ['Email & SMS campaigns',     '—',        '—',       '✓',        '✓'],
-    ['Rich customer profile',     '—',        '—',       '✓',        '✓'],
-    ['Merchandising rules',       '—',        '—',       '—',        '✓'],
-    ['Complex offer rules',       '—',        '—',       '—',        '✓'],
+    ['Offers & coupons',                '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Complex offer rules',             '—',        '—',         '✓',          '✓',          '✓'],
+    ['Customer groups',                 '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Rich customer profile',           '—',        '—',         '✓',          '✓',          '✓'],
+    ['Custom email/SMS templating',     '—',        '—',         '✓',          '✓',          '✓'],
+    ['Email & SMS campaigns',           '—',        '—',         '✓',          '✓',          '✓'],
+    ['Loyalty (Fynd Engage)',           '—',        '—',         '✓',          '✓',          '✓'],
+    ['AI Studio credits',               '₹50/cr',   '₹50/cr',    '₹50/cr',     '₹50/cr',     '₹50/cr'],
   ]},
-  { g:'PLATFORM & INTEGRATIONS', rows:[
-    ['Webhook & API access',      '—',        'w/o PII', 'Full',     'Full'],
-    ['Sell on marketplaces',      '—',        '✓',       '✓',        '✓'],
-    ['Geo pricing zones',         '—',        '3',       '3',        '50'],
-    ['Redirection rules',         '—',        '—',       '✓',        '✓'],
-    ['Social login',              '—',        '—',       '✓',        '✓'],
+  { g:'CUSTOMIZATION', rows:[
+    ['Custom invoice & label format',   '—',        '✓',         '✓',          '✓',          '✓'],
+    ['AI-powered storefront sections',  '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Webhook access',                  'w/o PII',  'w/o PII',   'Full',       'Full',       'Full'],
+    ['API SDK access',                  'w/o PII',  'w/o PII',   'Full',       'Full',       'Full'],
+    ['Commerce Automation',             '—',        'Add-on',    'Add-on',     'Add-on',     'Add-on'],
   ]},
-  { g:'ENTERPRISE', rows:[
-    ['B2B storefront',            '—',        '—',       '—',        '✓'],
-    ['Multi-seller marketplace',  '—',        '—',       '—',        '✓'],
-    ['Custom checkout',           '—',        '—',       '—',        '✓'],
-    ['Sandbox storefront',        '—',        '—',       '—',        '✓'],
-    ['Custom analytics',          '—',        '—',       '—',        '✓'],
-    ['Dedicated account manager', '—',        '—',       '—',        '✓'],
+  { g:'INTERNATIONAL', rows:[
+    ['Product pricing by geography',    '—',        '3 zones',   '3 zones',    '3 + overage','50 zones'],
   ]},
-  { g:'SUPPORT', rows:[
-    ['Training & setup',          'Docs',     'Docs',    'Docs + Chat','+ KAM + Onsite'],
-    ['24x7 support',              'Self-serve','Chat',   'Chat & Ticket','Priority AM'],
+  { g:'LOGISTICS', rows:[
+    ['Managed Logistics (India)',       'Per actuals', 'Per actuals','Per actuals','Per actuals','Per actuals'],
+    ['Non-delivery report automation',  '✓',        '✓',         '✓',          '✓',          '✓'],
+    ['Logistics apps',                  'Ex-India', 'Ex-India',  'Ex-India',   'Ex-India',   '✓'],
+    ['Estimated delivery date',         '50 free',  '1 cr/order','1 cr/order', '1 cr/order', '1 cr/order'],
+    ['Logistics credits',               '₹1/cr',    '₹1/cr',     '₹1/cr',      '₹1/cr',      '₹1/cr'],
+    ['Shipment insurance',              'Up to ₹2,500','Up to ₹2,500','Up to ₹2,500','Up to ₹2,500','Up to ₹2,500'],
+  ]},
+  { g:'JUST FOR ENTERPRISE', rows:[
+    ['Dedicated account manager',       '—',        '—',         '—',          '—',          '✓'],
+    ['High-volume checkout',            '—',        '—',         '—',          '—',          '✓'],
+    ['Custom analytics',                '—',        '—',         '—',          '—',          '✓'],
+    ['B2B storefront',                  '—',        '—',         '—',          '—',          '✓'],
+    ['Build your marketplace',          '—',        '—',         '—',          '—',          '✓'],
+    ['Cross-selling (franchise)',       '—',        '—',         '—',          '—',          '✓'],
+    ['QSR on Fynd',                     '—',        '—',         '—',          '—',          'Custom'],
+  ]},
+  { g:'CUSTOMER SUPPORT', rows:[
+    ['Training & setup',                'Docs + onboarding','Docs + onboarding','Docs + onboarding','Docs + onboarding','+ KAM + onsite'],
+    ['24×7 support',                    'Chat & ticket','Chat & ticket','Chat & ticket','Chat & ticket','Priority AM'],
   ]},
 ];
 
@@ -1103,22 +1284,48 @@ function buildTable(id) {
   b.innerHTML = '';
   T.forEach(group => {
     const hr = document.createElement('tr');
-    hr.className = 'cat-tr'; hr.dataset.g = group.g;
-    hr.innerHTML = `<td colspan="5">${group.g}</td>`;
+    /* Default: COLLAPSED — features hidden until user taps */
+    hr.className = 'cat-tr closed'; hr.dataset.g = group.g;
+    hr.innerHTML = `<td colspan="6">${group.g}</td>`;
     hr.onclick = function() {
       const c = this.classList.toggle('closed');
       b.querySelectorAll(`[data-gm="${group.g}"]`).forEach(r => r.style.display = c ? 'none' : '');
+      syncExpandAllLabel();
     };
     b.appendChild(hr);
-    group.rows.forEach(([f,fr,st,pr,en]) => {
+    group.rows.forEach(([f,ft,st,gr,sc,en]) => {
       const r = document.createElement('tr');
       r.dataset.gm = group.g;
-      r.innerHTML = `<td>${f}</td><td>${cell(fr)}</td><td>${cell(st)}</td><td>${cell(pr)}</td><td>${cell(en)}</td>`;
+      r.style.display = 'none'; /* Default hidden under closed category */
+      r.innerHTML = `<td>${f}</td><td>${cell(ft)}</td><td>${cell(st)}</td><td>${cell(gr)}</td><td>${cell(sc)}</td><td>${cell(en)}</td>`;
       b.appendChild(r);
     });
   });
 }
 buildTable('tbl-platform');
+
+/* Master expand/collapse-all toggle (Shopify-inspired) */
+function toggleAllCategories(e) {
+  if(e) e.preventDefault();
+  const b = document.getElementById('tbl-platform');
+  if(!b) return;
+  const cats = b.querySelectorAll('.cat-tr');
+  /* If any are closed, expand all. Otherwise collapse all. */
+  const anyClosed = Array.from(cats).some(c => c.classList.contains('closed'));
+  cats.forEach(c => {
+    if(anyClosed) c.classList.remove('closed');
+    else c.classList.add('closed');
+    b.querySelectorAll(`[data-gm="${c.dataset.g}"]`).forEach(r => r.style.display = anyClosed ? '' : 'none');
+  });
+  syncExpandAllLabel();
+}
+function syncExpandAllLabel() {
+  const link = document.getElementById('js-expand-all');
+  if(!link) return;
+  const cats = document.querySelectorAll('#tbl-platform .cat-tr');
+  const anyClosed = Array.from(cats).some(c => c.classList.contains('closed'));
+  link.textContent = anyClosed ? 'Expand all →' : 'Collapse all →';
+}
 
 /* ─── BILLING TOGGLE ──────────────────────────────────────────────── */
 let mode = 'annual';
