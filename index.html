@@ -227,21 +227,26 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .promo-banner p { color: #3B5BD4; font-size: 13px; margin-top: 3px; line-height: 1.5; }
 
 /* ─── SECTION HEAD ────────────────────────────────────────────────── */
+/* Centered hero treatment, Shopify-inspired ("You've got plans. Us too.") */
 .section-label {
   font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .08em; color: var(--accent-mid); margin-bottom: 6px;
+  letter-spacing: .08em; color: var(--accent-mid);
+  margin: 0 auto 8px; text-align: center; display: block;
 }
 .section-title {
-  font-size: 28px; font-weight: 700; letter-spacing: -.6px;
-  color: var(--black); margin-bottom: 8px; line-height: 1.2;
+  font-size: 44px; font-weight: 700; letter-spacing: -1.2px;
+  color: var(--black); line-height: 1.1;
+  margin: 0 auto 14px; max-width: 760px; text-align: center;
 }
 .section-desc {
-  font-size: 15px; color: var(--gray-500); margin-bottom: 28px;
-  max-width: 560px; line-height: 1.55;
+  font-size: 16px; color: var(--gray-500);
+  margin: 0 auto 36px; max-width: 580px;
+  line-height: 1.55; text-align: center;
 }
 .section-desc a {
   color: var(--accent-mid); font-weight: 500;
   border-bottom: 1px solid rgba(78,82,242,.28);
+  transition: border-color .14s;
 }
 .section-desc a:hover { border-color: var(--accent-start); }
 
@@ -402,6 +407,54 @@ td:not(:first-child) { text-align: center; color: var(--black); }
 .c-add { font-size: 11px; font-weight: 500; color: #9A5800; background: #FFF3D0; padding: 2px 7px; border-radius: 4px; display: inline-block; }
 .c-txt { font-size: 12px; }
 .c-cus { font-size: 12px; color: var(--gray-400); font-style: italic; }
+
+/* ─── HERO CTA PILL (Shopify-inspired existing-user nudges) ──────── */
+.cta-pill-section {
+  margin: 0 auto 36px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.cta-pill {
+  display: inline-flex; align-items: center; gap: 14px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 5px 5px 5px 22px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.04);
+  max-width: 100%;
+}
+.cta-pill-label {
+  font-size: 14px; color: var(--gray-700); font-weight: 500;
+  white-space: nowrap;
+}
+.cta-pill-btn {
+  background: var(--black); color: var(--white);
+  font-size: 14px; font-weight: 600;
+  padding: 10px 20px; border-radius: 100px;
+  white-space: nowrap;
+  transition: background .15s;
+  font-family: var(--font);
+  border: none;
+  cursor: pointer;
+}
+.cta-pill-btn:hover { background: var(--gray-700); }
+.cta-pill-secondary {
+  display: flex; gap: 14px; align-items: center;
+  font-size: 13px; color: var(--gray-400);
+  flex-wrap: wrap; justify-content: center;
+}
+.cta-pill-secondary a {
+  color: var(--accent-mid); font-weight: 500;
+  border-bottom: 1px solid rgba(78,82,242,.28);
+  transition: border-color .14s;
+}
+.cta-pill-secondary a:hover { border-color: var(--accent-start); }
+.cta-pill-secondary .dot { color: var(--gray-300); }
+
+@media (max-width: 479px) {
+  .cta-pill { flex-direction: column; gap: 8px; padding: 12px; border-radius: 16px; }
+  .cta-pill-label { white-space: normal; text-align: center; }
+  .cta-pill-btn { width: 100%; text-align: center; }
+}
 
 /* ─── SALES NUDGE (Enterprise CTA stack + bottom nudge bar) ──────── */
 .cta-stack { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
@@ -776,8 +829,22 @@ body.drawer-open .nav-backdrop {
       <h1 class="section-title">Fynd your fit.</h1>
       <p class="section-desc">
         Five plans. Every channel. Pick what you actually need — we'll grow with you.
-        <a href="#">Calculate your price →</a>
       </p>
+
+      <!-- HERO CTA PILL — existing-user nudges (Shopify-inspired) -->
+      <div class="cta-pill-section">
+        <div class="cta-pill">
+          <span class="cta-pill-label">Already on Fynd?</span>
+          <a href="https://platform.fynd.com" class="cta-pill-btn" target="_blank" rel="noopener">Sign in to console →</a>
+        </div>
+        <div class="cta-pill-secondary">
+          <a href="#" onclick="document.querySelector('.compare-wrap').scrollIntoView({behavior:'smooth',block:'start'});return false;">Explore features</a>
+          <span class="dot">·</span>
+          <a href="#">Upgrade your plan →</a>
+          <span class="dot">·</span>
+          <a href="#">Calculate your price →</a>
+        </div>
+      </div>
 
       <div class="cards-row cols-5" id="platform-cards">
 
