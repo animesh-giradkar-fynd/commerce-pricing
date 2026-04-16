@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fynd — Pricing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<!-- Satoshi: closest free proxy for Fynd Sans (Fynd's proprietary heading typeface) -->
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
 <style>
 
 /* ─── FYND DESIGN TOKENS ─────────────────────────────────────────── */
@@ -38,7 +41,10 @@
   --border-light: #EBEBЕ4;
 
   /* Typography */
-  --font:         'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Body: Inter — same family Fynd uses as "Inter Display" secondary
+     Headings: Satoshi — closest free proxy for Fynd's proprietary "Fynd Sans" */
+  --font:         'Satoshi', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Satoshi', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Layout */
   --nav-w:        240px;
@@ -70,21 +76,13 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   padding: 0 32px; gap: 32px;
 }
 .logo {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 18px; font-weight: 700;
-  color: var(--black); letter-spacing: -.3px; flex-shrink: 0;
+  display: flex; align-items: center;
+  color: var(--black); flex-shrink: 0;
 }
-.logo-icon {
-  width: 28px; height: 28px;
+.logo-lockup {
+  height: 24px; width: auto;
   display: block;
-  object-fit: contain;
   flex-shrink: 0;
-}
-.logo-wordmark { display: inline-flex; align-items: baseline; gap: 5px; }
-.logo-wordmark .commerce {
-  font-weight: 400;
-  color: var(--gray-500);
-  letter-spacing: -.2px;
 }
 .topnav-links { display: flex; gap: 24px; list-style: none; }
 .topnav-links a {
@@ -110,8 +108,8 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   height: var(--bar-h);
   background: var(--white); border-bottom: 1px solid var(--border);
   display: flex; align-items: center;
-  padding-left: calc(var(--nav-w) + 32px);
-  padding-right: 32px; gap: 14px;
+  justify-content: center;
+  padding: 0 24px; gap: 14px;
 }
 .toggle-group {
   display: inline-flex;
@@ -140,7 +138,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 /* ─── SHELL ───────────────────────────────────────────────────────── */
 .shell {
   display: grid;
-  grid-template-columns: var(--nav-w) 1fr;
+  grid-template-columns: 1fr;
   max-width: 1480px;
   margin: 0 auto;
   min-height: calc(100vh - var(--top-h) - var(--bar-h));
@@ -160,12 +158,20 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
 .leftnav {
   background: var(--nav-bg);
   border-right: 1px solid var(--border);
-  position: sticky;
-  top: calc(var(--top-h) + var(--bar-h));
-  height: calc(100vh - var(--top-h) - var(--bar-h));
+  position: fixed;
+  top: 0; left: 0;
+  width: 280px; max-width: 86vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 400;
+  transform: translateX(-100%);
+  transition: transform .22s ease;
+  box-shadow: 4px 0 24px rgba(0,0,0,.1);
   overflow-y: auto;
   padding: 24px 0 32px;
 }
+body.drawer-open .leftnav { transform: translateX(0); }
+body.drawer-open { overflow: hidden; }
 .leftnav::-webkit-scrollbar { width: 0; }
 
 .nav-section { margin-bottom: 8px; }
@@ -258,14 +264,7 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   margin-bottom: 40px;
 }
 .cards-row.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.cards-row.cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-.cards-row.cols-5 .card { padding: 18px 16px 16px; }
-.cards-row.cols-5 .card-name { font-size: 16px; }
-.cards-row.cols-5 .card-tagline { font-size: 11px; margin-bottom: 14px; }
-.cards-row.cols-5 .price-num { font-size: 28px; letter-spacing: -.6px; }
-.cards-row.cols-5 .price-num.free-price { font-size: 22px; }
-.cards-row.cols-5 .feat-list li { font-size: 11.5px; }
-.cards-row.cols-5 .card-btn { padding: 9px 12px; font-size: 12.5px; }
+.cards-row.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 /* ─── PLAN CARD ───────────────────────────────────────────────────── */
 .card {
@@ -531,9 +530,9 @@ td:not(:first-child) { text-align: center; color: var(--black); }
 .addon-btn:hover { border-color: var(--green); color: var(--green); }
 .addon.on .addon-btn { background: var(--green); color: var(--white); border-color: var(--green); }
 
-/* ─── HAMBURGER + CURRENT SECTION (mobile only) ──────────────────── */
+/* ─── HAMBURGER + CURRENT SECTION (always visible — drawer triggers) ──────────────────── */
 .hamburger {
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 4px;
@@ -561,7 +560,7 @@ body.drawer-open .hamburger span:nth-child(2) { opacity: 0; }
 body.drawer-open .hamburger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 .current-section {
-  display: none;
+  display: inline-block;
   font-size: 13px; font-weight: 500;
   color: var(--gray-700);
   background: var(--gray-100);
@@ -574,9 +573,9 @@ body.drawer-open .hamburger span:nth-child(3) { transform: translateY(-6px) rota
   max-width: 180px;
 }
 
-/* ─── NAV BACKDROP (mobile drawer overlay) ───────────────────────── */
+/* ─── NAV BACKDROP (drawer overlay — always present) ───────────────────────── */
 .nav-backdrop {
-  display: none;
+  display: block;
   position: fixed; inset: 0;
   background: rgba(0,0,0,.4);
   z-index: 350;
@@ -612,11 +611,9 @@ body.drawer-open .nav-backdrop {
 /* ─── RESPONSIVE BREAKPOINTS ─────────────────────────────────────── */
 /* Aligned with Webflow defaults: 991 / 767 / 479 */
 
-/* 5-col grid → 3-col below 1200px */
+/* 4-col grid → 2-col below 1200px */
 @media (max-width: 1199px) {
-  .cards-row.cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .cards-row.cols-5 .card { padding: 22px 20px 20px; }
-  .cards-row.cols-5 .price-num { font-size: 32px; }
+  .cards-row.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* Tablet portrait & smaller — narrower content */
@@ -626,52 +623,14 @@ body.drawer-open .nav-backdrop {
   .main { padding: 36px 36px 64px; }
 }
 
-/* 5-col grid → 2-col below 992px (matches main grid drop) */
+/* ≤991px — narrower touch-friendly layout */
 @media (max-width: 991px) {
-  .cards-row.cols-5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
-/* ≤991px — sidebar becomes hamburger drawer */
-@media (max-width: 991px) {
-  /* Layout shifts: shell becomes single-column */
-  .shell { grid-template-columns: 1fr; }
-  .billing-bar {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-
-  /* Reveal hamburger + current-section chip in topnav */
-  .hamburger { display: flex; }
-  .current-section { display: inline-block; }
-
   /* Hide secondary topnav items to free up space */
   .topnav-links { display: none; }
   .topnav-phone { display: none; }
   .topnav { padding: 0 16px; gap: 12px; }
   .topnav-right { gap: 6px; }
   .nav-cta { padding: 6px 12px; font-size: 12px; }
-
-  /* Drawer backdrop visible (opacity controlled by .drawer-open) */
-  .nav-backdrop { display: block; }
-
-  /* Sidebar transforms into off-canvas drawer */
-  .leftnav {
-    position: fixed;
-    top: 0; left: 0;
-    width: 280px;
-    max-width: 86vw;
-    height: 100vh;
-    height: 100dvh;
-    z-index: 400;
-    transform: translateX(-100%);
-    transition: transform .22s ease;
-    box-shadow: 4px 0 24px rgba(0,0,0,.1);
-    padding: 24px 0 32px;
-    border-right: 1px solid var(--border);
-    background: var(--nav-bg);
-  }
-  body.drawer-open .leftnav { transform: translateX(0); }
-  body.drawer-open { overflow: hidden; }
 
   /* Bigger nav items for touch */
   .nav-link { padding: 14px 24px; font-size: 16px; }
@@ -706,7 +665,7 @@ body.drawer-open .nav-backdrop {
 
 /* ≤479px — mobile portrait */
 @media (max-width: 479px) {
-  .cards-row, .cards-row.cols-3, .cards-row.cols-5 { grid-template-columns: 1fr; }
+  .cards-row, .cards-row.cols-3, .cards-row.cols-4 { grid-template-columns: 1fr; }
   .main { padding: 24px 16px 48px; }
   .billing-bar {
     padding-left: 16px; padding-right: 16px;
@@ -734,8 +693,7 @@ body.drawer-open .nav-backdrop {
     <span></span><span></span><span></span>
   </button>
   <a href="https://www.fynd.com/commerce" class="logo" aria-label="Fynd Commerce home">
-    <img class="logo-icon" src="https://cdn.pixelbin.io/v2/fynd-console/original/console-frontend/console_logo_new_black.svg" alt="" width="28" height="28" loading="eager" decoding="async">
-    <span class="logo-wordmark">Fynd<span class="commerce">Commerce</span></span>
+    <img class="logo-lockup" src="assets/fynd-commerce-logo.svg" alt="Fynd Commerce" height="28" loading="eager" decoding="async">
   </a>
   <span class="current-section" id="js-current-section" aria-live="polite">Customer Platform</span>
   <ul class="topnav-links">
@@ -760,8 +718,7 @@ body.drawer-open .nav-backdrop {
     <button class="toggle-btn" id="btn-m" onclick="setBilling('monthly')">Monthly</button>
     <button class="toggle-btn on" id="btn-a" onclick="setBilling('annual')">Annual</button>
   </div>
-  <span class="save-tag">Save 20%</span>
-  <span class="billing-note">30-day free trial on all plans</span>
+  <span class="save-tag" id="js-save-tag" hidden>Save 20%</span>
 </div>
 
 <!-- MAIN SHELL -->
@@ -822,7 +779,7 @@ body.drawer-open .nav-backdrop {
 
       <div class="promo-banner">
         <b>Save up to 20% on annual plans</b>
-        <p>Get Starter now: ₹1,199/mo (was ₹1,499) billed annually. 30-day free trial included. No credit card required.</p>
+        <p>Get Starter now: ₹1,199/mo (was ₹1,499) billed annually.</p>
       </div>
 
       <div class="section-label">Customer Platform</div>
@@ -846,30 +803,7 @@ body.drawer-open .nav-backdrop {
         </div>
       </div>
 
-      <div class="cards-row cols-5" id="platform-cards">
-
-        <!-- FREE TRIAL -->
-        <div class="card" data-api-key="plan_free_trial">
-          <div class="card-name">Free Trial</div>
-          <div class="card-tagline">30 days free. Try every Growth feature. No credit card required.</div>
-          <div class="price-area">
-            <div class="price-eyebrow">Price</div>
-            <div class="price-main">
-              <span class="price-num free-price">₹0</span>
-              <span class="price-per">/30 days</span>
-            </div>
-            <div class="price-annual">Then choose a plan · 0% transaction fee</div>
-          </div>
-          <button class="card-btn btn-outline">Start free trial →</button>
-          <div class="feat-heading">Includes</div>
-          <ul class="feat-list">
-            <li><span class="feat-tick">✓</span> 1 storefront · 1 location</li>
-            <li><span class="feat-tick">✓</span> Ask Fynd AI</li>
-            <li><span class="feat-tick">✓</span> Return &amp; refund mgmt</li>
-            <li><span class="feat-tick">✓</span> Reports &amp; dashboards</li>
-            <li><span class="feat-tick">✓</span> 50 free delivery ETAs</li>
-          </ul>
-        </div>
+      <div class="cards-row cols-4" id="platform-cards">
 
         <!-- STARTER -->
         <div class="card" data-api-key="plan_starter">
@@ -885,8 +819,8 @@ body.drawer-open .nav-backdrop {
             <div class="price-annual ps" data-a="₹1,499/month · billed annually" data-m="No annual commitment">₹1,499/month · billed annually</div>
             <div class="price-note">2.5% B2C transaction fee</div>
           </div>
-          <button class="card-btn btn-outline">Start free trial →</button>
-          <div class="feat-heading">Everything in Free Trial, plus:</div>
+          <button class="card-btn btn-outline">Get started →</button>
+          <div class="feat-heading">Includes:</div>
           <ul class="feat-list">
             <li><span class="feat-tick">✓</span> 10 fulfilment locations</li>
             <li><span class="feat-tick">✓</span> Payment gateways</li>
@@ -915,7 +849,7 @@ body.drawer-open .nav-backdrop {
             <div class="price-annual ps" data-a="₹2,999/month · billed annually" data-m="No annual commitment">₹2,999/month · billed annually</div>
             <div class="price-note">2.0% B2C transaction fee</div>
           </div>
-          <button class="card-btn btn-dark">Start free trial →</button>
+          <button class="card-btn btn-dark">Get started →</button>
           <div class="feat-heading">Everything in Starter, plus:</div>
           <ul class="feat-list">
             <li><span class="feat-tick">✓</span> Quick Commerce on Fynd</li>
@@ -942,7 +876,7 @@ body.drawer-open .nav-backdrop {
             <div class="price-annual ps" data-a="₹3,999/month · billed annually" data-m="No annual commitment">₹3,999/month · billed annually</div>
             <div class="price-note">1.5% B2C transaction fee</div>
           </div>
-          <button class="card-btn btn-outline">Start free trial →</button>
+          <button class="card-btn btn-outline">Get started →</button>
           <div class="feat-heading">Everything in Growth, plus:</div>
           <ul class="feat-list">
             <li><span class="feat-tick">✓</span> Merchandising rules</li>
@@ -998,7 +932,6 @@ body.drawer-open .nav-backdrop {
               <thead>
                 <tr>
                   <th style="width:30%">Feature</th>
-                  <th>Free Trial</th>
                   <th>Starter</th>
                   <th class="th-green">Growth</th>
                   <th>Scale</th>
@@ -1137,7 +1070,7 @@ body.drawer-open .nav-backdrop {
             <div class="price-main"><span class="price-sym">₹</span><span class="price-num pp" data-a="14,999" data-m="1,799">14,999</span><span class="price-per pq" data-a="/year" data-m="/month">/year</span></div>
             <div class="price-annual ps" data-a="₹1,799/month · billed annually" data-m="No annual commitment">₹1,799/month · billed annually</div>
           </div>
-          <button class="card-btn btn-dark">Start free trial →</button>
+          <button class="card-btn btn-dark">Get started →</button>
           <ul class="feat-list"><li><span class="feat-tick">✓</span> Everything in Starter</li><li><span class="feat-tick">✓</span> Konnect access included</li><li><span class="feat-tick">✓</span> 500 logistics credits</li><li><span class="feat-tick">✓</span> Guided onboarding</li></ul>
         </div>
         <div class="card">
@@ -1147,7 +1080,7 @@ body.drawer-open .nav-backdrop {
             <div class="price-eyebrow">Starts at</div>
             <div class="price-main"><span class="price-sym">₹</span><span class="price-num pp" data-a="28,999" data-m="3,499">28,999</span><span class="price-per pq" data-a="/year" data-m="/month">/year</span></div>
           </div>
-          <button class="card-btn btn-outline">Start free trial →</button>
+          <button class="card-btn btn-outline">Get started →</button>
           <ul class="feat-list"><li><span class="feat-tick">✓</span> Everything in Professional</li><li><span class="feat-tick">✓</span> 1 POS location included</li><li><span class="feat-tick">✓</span> 200 AI Studio credits</li></ul>
         </div>
         <div class="card">
@@ -1167,8 +1100,8 @@ body.drawer-open .nav-backdrop {
       <p class="section-desc">Launch your D2C website with built-in SEO, payments, and logistics. Starts at ₹11,111/year.</p>
       <div class="cards-row">
         <div class="card"><div class="card-name">Free</div><div class="card-tagline">1 storefront · Fynd subdomain</div><div class="price-area"><div class="price-main"><span class="price-num free-price">₹0</span></div></div><button class="card-btn btn-outline">Get started →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> 1 storefront</li><li><span class="feat-tick">✓</span> Basic catalog</li></ul></div>
-        <div class="card"><div class="card-name">Starter</div><div class="card-tagline">For growing brands</div><div class="price-area"><div class="price-main"><span class="price-sym">₹</span><span class="price-num pp" data-a="11,111" data-m="1,499">11,111</span><span class="price-per pq" data-a="/year" data-m="/month">/year</span></div><div class="price-annual ps" data-a="₹1,499/month · annually" data-m="">₹1,499/month · annually</div></div><button class="card-btn btn-outline">Start free trial →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Custom domain</li><li><span class="feat-tick">✓</span> Payment gateways</li><li><span class="feat-tick">✓</span> 10 fulfilment locations</li></ul></div>
-        <div class="card featured"><div class="badge-pop">Most popular</div><div class="card-name">Professional</div><div class="card-tagline">Omnichannel retailers</div><div class="price-area"><div class="price-main"><span class="price-sym">₹</span><span class="price-num pp" data-a="22,222" data-m="2,999">22,222</span><span class="price-per pq" data-a="/year" data-m="/month">/year</span></div></div><button class="card-btn btn-dark">Start free trial →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Quick commerce</li><li><span class="feat-tick">✓</span> Map-based shipping</li><li><span class="feat-tick">✓</span> Email &amp; SMS campaigns</li></ul></div>
+        <div class="card"><div class="card-name">Starter</div><div class="card-tagline">For growing brands</div><div class="price-area"><div class="price-main"><span class="price-sym">₹</span><span class="price-num pp" data-a="11,111" data-m="1,499">11,111</span><span class="price-per pq" data-a="/year" data-m="/month">/year</span></div><div class="price-annual ps" data-a="₹1,499/month · annually" data-m="">₹1,499/month · annually</div></div><button class="card-btn btn-outline">Get started →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Custom domain</li><li><span class="feat-tick">✓</span> Payment gateways</li><li><span class="feat-tick">✓</span> 10 fulfilment locations</li></ul></div>
+        <div class="card featured"><div class="badge-pop">Most popular</div><div class="card-name">Professional</div><div class="card-tagline">Omnichannel retailers</div><div class="price-area"><div class="price-main"><span class="price-sym">₹</span><span class="price-num pp" data-a="22,222" data-m="2,999">22,222</span><span class="price-per pq" data-a="/year" data-m="/month">/year</span></div></div><button class="card-btn btn-dark">Get started →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> Quick commerce</li><li><span class="feat-tick">✓</span> Map-based shipping</li><li><span class="feat-tick">✓</span> Email &amp; SMS campaigns</li></ul></div>
         <div class="card"><div class="card-name">Enterprise</div><div class="card-tagline">5+ storefronts · Marketplace</div><div class="price-area"><div class="price-main"><span class="price-num free-price">Custom</span></div></div><button class="card-btn btn-outline">Talk to sales →</button><ul class="feat-list"><li><span class="feat-tick">✓</span> B2B &amp; marketplace</li><li><span class="feat-tick">✓</span> Custom checkout</li></ul></div>
       </div>
     </div>
@@ -1249,7 +1182,7 @@ body.drawer-open .nav-backdrop {
  *   administration, Retail Store Technology, Marketing, Customization,
  *   International, Fynd Marketplace Konnect (skipped — 0 SIT rows),
  *   Logistics, Just for Enterprise, Customer Support.
- * Columns: Free Trial, Starter, Growth, Scale, Enterprise. */
+ * Columns: Starter, Growth, Scale, Enterprise. */
 const T = [
   { g:'CORE FEATURES', rows:[
     ['Storefronts',                     '1',        '1',         '1',          '1',          '5+'],
@@ -1355,7 +1288,7 @@ function buildTable(id) {
     const hr = document.createElement('tr');
     /* Default: COLLAPSED — features hidden until user taps */
     hr.className = 'cat-tr closed'; hr.dataset.g = group.g;
-    hr.innerHTML = `<td colspan="6">${group.g}</td>`;
+    hr.innerHTML = `<td colspan="5">${group.g}</td>`;
     hr.onclick = function() {
       const c = this.classList.toggle('closed');
       b.querySelectorAll(`[data-gm="${group.g}"]`).forEach(r => r.style.display = c ? 'none' : '');
@@ -1366,12 +1299,13 @@ function buildTable(id) {
       const r = document.createElement('tr');
       r.dataset.gm = group.g;
       r.style.display = 'none'; /* Default hidden under closed category */
-      r.innerHTML = `<td>${f}</td><td>${cell(ft)}</td><td>${cell(st)}</td><td>${cell(gr)}</td><td>${cell(sc)}</td><td>${cell(en)}</td>`;
+      r.innerHTML = `<td>${f}</td><td>${cell(st)}</td><td>${cell(gr)}</td><td>${cell(sc)}</td><td>${cell(en)}</td>`;
       b.appendChild(r);
     });
   });
 }
 buildTable('tbl-platform');
+syncExpandAllLabel();   /* set initial thead visibility (all cats start collapsed) */
 
 /* Master expand/collapse-all toggle (Shopify-inspired) */
 function toggleAllCategories(e) {
@@ -1390,10 +1324,14 @@ function toggleAllCategories(e) {
 }
 function syncExpandAllLabel() {
   const link = document.getElementById('js-expand-all');
-  if(!link) return;
-  const cats = document.querySelectorAll('#tbl-platform .cat-tr');
-  const anyClosed = Array.from(cats).some(c => c.classList.contains('closed'));
-  link.textContent = anyClosed ? 'Expand all →' : 'Collapse all →';
+  const tbody = document.getElementById('tbl-platform');
+  if(!tbody) return;
+  const cats = tbody.querySelectorAll('.cat-tr');
+  const allClosed = Array.from(cats).every(c => c.classList.contains('closed'));
+  if(link) link.textContent = allClosed ? 'Expand all →' : 'Collapse all →';
+  /* Hide plan-column headers when nothing is expanded — avoids phantom empty cells */
+  const thead = tbody.closest('table')?.querySelector('thead');
+  if(thead) thead.style.display = allClosed ? 'none' : '';
 }
 
 /* ─── BILLING TOGGLE ──────────────────────────────────────────────── */
@@ -1402,6 +1340,7 @@ function setBilling(m) {
   mode = m;
   document.getElementById('btn-a').classList.toggle('on', m==='annual');
   document.getElementById('btn-m').classList.toggle('on', m==='monthly');
+  document.getElementById('js-save-tag').hidden = (m === 'annual');
   document.querySelectorAll('.pp').forEach(el => el.textContent = m==='annual' ? el.dataset.a : el.dataset.m);
   document.querySelectorAll('.pq').forEach(el => el.textContent = m==='annual' ? el.dataset.a : el.dataset.m);
   document.querySelectorAll('.ps').forEach(el => el.textContent = m==='annual' ? el.dataset.a : el.dataset.m);
@@ -1443,24 +1382,48 @@ function toggleAddon(id) {
   c.querySelector('.addon-btn').textContent = on ? '✓ Added' : '+ Add';
 }
 
-/* ─── MOBILE DRAWER ───────────────────────────────────────────────── */
-function toggleDrawer() {
-  const open = document.body.classList.toggle('drawer-open');
+/* ─── LEFT DRAWER ──────────────────────────────────────────────────
+   Sidebar is always off-canvas. Trigger behaviors:
+   - Tap hamburger → toggle (works on all devices)
+   - Hover hamburger (desktop / hover-capable only) → open
+   - Mouse leaves hamburger+drawer area → close after short delay
+   - Tap nav link inside drawer → closeDrawer() (via show() handler)
+   - Tap backdrop → close
+   - Esc → close                                                    */
+function openDrawer() {
+  document.body.classList.add('drawer-open');
   const btn = document.getElementById('js-hamburger');
-  if(btn) btn.setAttribute('aria-expanded', String(open));
+  if(btn) btn.setAttribute('aria-expanded', 'true');
 }
 function closeDrawer() {
   document.body.classList.remove('drawer-open');
   const btn = document.getElementById('js-hamburger');
   if(btn) btn.setAttribute('aria-expanded', 'false');
 }
+function toggleDrawer() {
+  if(document.body.classList.contains('drawer-open')) closeDrawer();
+  else openDrawer();
+}
 document.addEventListener('keydown', function(e) {
   if(e.key === 'Escape' && document.body.classList.contains('drawer-open')) closeDrawer();
 });
-/* Close drawer if viewport grows past mobile breakpoint */
-window.addEventListener('resize', function() {
-  if(window.innerWidth > 991 && document.body.classList.contains('drawer-open')) closeDrawer();
-});
+
+/* Hover-to-open on desktop (hover-capable devices only — skips touch) */
+(function() {
+  const ham = document.getElementById('js-hamburger');
+  const drawer = document.getElementById('js-leftnav');
+  if(!ham || !drawer) return;
+  if(!window.matchMedia('(hover: hover)').matches) return;
+
+  let closeTimer = null;
+  const cancelClose = () => { if(closeTimer) { clearTimeout(closeTimer); closeTimer = null; } };
+  const scheduleClose = () => { cancelClose(); closeTimer = setTimeout(closeDrawer, 200); };
+
+  ham.addEventListener('mouseenter', () => { cancelClose(); openDrawer(); });
+  ham.addEventListener('mouseleave', scheduleClose);
+  drawer.addEventListener('mouseenter', cancelClose);
+  drawer.addEventListener('mouseleave', scheduleClose);
+})();
 </script>
 
 </body>
