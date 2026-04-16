@@ -70,21 +70,21 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   padding: 0 32px; gap: 32px;
 }
 .logo {
-  display: flex; align-items: center; gap: 9px;
+  display: flex; align-items: center; gap: 8px;
   font-size: 18px; font-weight: 700;
   color: var(--black); letter-spacing: -.3px; flex-shrink: 0;
 }
-.logo-box {
-  width: 30px; height: 30px;
-  background: var(--green);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
 .logo-icon {
-  width: 18px; height: 18px;
+  width: 28px; height: 28px;
   display: block;
   object-fit: contain;
+  flex-shrink: 0;
+}
+.logo-wordmark { display: inline-flex; align-items: baseline; gap: 5px; }
+.logo-wordmark .commerce {
+  font-weight: 400;
+  color: var(--gray-500);
+  letter-spacing: -.2px;
 }
 .topnav-links { display: flex; gap: 24px; list-style: none; }
 .topnav-links a {
@@ -680,11 +680,9 @@ body.drawer-open .nav-backdrop {
   <button class="hamburger" id="js-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-leftnav" onclick="toggleDrawer()">
     <span></span><span></span><span></span>
   </button>
-  <a href="https://www.fynd.com" class="logo" aria-label="Fynd home">
-    <span class="logo-box">
-      <img class="logo-icon" src="https://cdn.prod.website-files.com/67a9c8e5f2c74ac8c2c9b88b/67c05232e4860e3c43444560_Logo_icon.avif" alt="Fynd" width="18" height="18" loading="eager" decoding="async">
-    </span>
-    Fynd
+  <a href="https://www.fynd.com/commerce" class="logo" aria-label="Fynd Commerce home">
+    <img class="logo-icon" src="https://cdn.pixelbin.io/v2/fynd-console/original/console-frontend/console_logo_new_black.svg" alt="" width="28" height="28" loading="eager" decoding="async">
+    <span class="logo-wordmark">Fynd<span class="commerce">Commerce</span></span>
   </a>
   <span class="current-section" id="js-current-section" aria-live="polite">Customer Platform</span>
   <ul class="topnav-links">
