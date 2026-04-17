@@ -745,6 +745,224 @@ body.drawer-open .nav-backdrop {
   .price-num { font-size: 32px; }
   .card { padding: 20px 18px 18px; }
 }
+
+/* ─── CALCULATE YOUR PRICE — playground ───────────────────────────── */
+#panel-calculator .section-label { color: var(--accent-start); }
+#panel-calculator .section-title { font-size: 36px; margin-bottom: 8px; }
+
+.calc-range {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin: 20px 0 28px;
+}
+.calc-range-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.calc-range-label { font-size: 13px; color: var(--gray-500); font-weight: 500; }
+.calc-range-badge {
+  font-size: 11px; font-weight: 600;
+  background: var(--accent-tint); color: var(--accent-dark);
+  border-radius: 999px; padding: 4px 10px; letter-spacing: 0.02em;
+}
+.calc-range-track {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
+}
+.calc-range-min, .calc-range-max { font-size: 20px; font-weight: 700; color: var(--black); white-space: nowrap; }
+.calc-range-max { text-align: right; }
+.calc-range-bar {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--gray-100);
+  overflow: visible;
+}
+.calc-range-fill {
+  position: absolute; inset: 0;
+  border-radius: 999px;
+  background: var(--accent-grad);
+  opacity: 0.32;
+}
+.calc-range-dot {
+  position: absolute; top: 50%;
+  width: 18px; height: 18px;
+  background: var(--white);
+  border: 3px solid var(--accent-start);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 2px 10px rgba(78, 82, 242, 0.35);
+  transition: left 0.25s ease;
+}
+.calc-range-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 12px;
+  font-size: 13px; color: var(--gray-500);
+}
+.calc-range-enterprise { color: var(--accent-start); font-weight: 600; }
+.calc-range-enterprise:hover { text-decoration: underline; }
+
+.calc-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 28px;
+  align-items: start;
+}
+@media (max-width: 991px) { .calc-layout { grid-template-columns: 1fr; } }
+
+.calc-config { display: flex; flex-direction: column; gap: 22px; }
+.calc-block {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 24px;
+}
+.calc-block-title { font-size: 13px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 14px; }
+.calc-hint { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--gray-400); }
+.calc-row-two { padding: 0; background: transparent; border: none; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.calc-row-two > div { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; }
+
+.calc-plan-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 640px) { .calc-plan-chips { grid-template-columns: repeat(2, 1fr); } }
+.calc-plan {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 14px 16px;
+  text-align: left;
+  background: var(--white);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+.calc-plan:hover { border-color: var(--gray-400); }
+.calc-plan.on {
+  border-color: var(--accent-start);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+.calc-plan-name { font-weight: 700; font-size: 15px; }
+.calc-plan-price { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+.calc-plan-badge {
+  position: absolute; top: -9px; right: 10px;
+  background: var(--green); color: var(--white);
+  font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.calc-toggle { display: inline-flex; background: var(--gray-100); border-radius: 10px; padding: 4px; gap: 4px; }
+.calc-toggle-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  color: var(--gray-500);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.calc-toggle-btn.on { background: var(--white); color: var(--black); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); }
+
+.calc-addons { display: grid; gap: 10px; }
+.calc-addon {
+  display: flex; align-items: center; justify-content: space-between;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: var(--white);
+  transition: all 0.15s ease;
+}
+.calc-addon.on { border-color: var(--accent-start); background: var(--accent-tint); }
+.calc-addon.on .calc-addon-btn { background: var(--accent-start); color: var(--white); border-color: var(--accent-start); }
+.calc-addon-main { display: flex; flex-direction: column; gap: 2px; flex: 1 1 auto; }
+.calc-addon-name { font-weight: 600; font-size: 14px; }
+.calc-addon-desc { font-size: 12px; color: var(--gray-500); }
+.calc-addon-price { font-size: 13px; color: var(--gray-500); margin-right: 14px; white-space: nowrap; }
+.calc-addon-btn {
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px; font-weight: 600;
+  background: var(--white);
+  color: var(--black);
+  transition: all 0.15s ease;
+}
+
+.calc-sliders { display: flex; flex-direction: column; gap: 22px; }
+.calc-slider-row { display: flex; flex-direction: column; gap: 8px; }
+.calc-slider-head { display: flex; justify-content: space-between; align-items: baseline; }
+.calc-slider-name { font-weight: 600; font-size: 14px; }
+.calc-slider-val { font-weight: 700; font-size: 15px; color: var(--accent-start); }
+.calc-slider-input {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 6px;
+  background: var(--gray-100);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+.calc-slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 20px; height: 20px;
+  background: var(--accent-start);
+  border: 3px solid var(--white);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--accent-start), 0 2px 8px rgba(78, 82, 242, 0.35);
+  cursor: pointer;
+}
+.calc-slider-input::-moz-range-thumb {
+  width: 20px; height: 20px;
+  background: var(--accent-start);
+  border: 3px solid var(--white);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.calc-slider-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray-400); }
+.calc-slider-meta em { font-style: normal; color: var(--gray-500); }
+
+.calc-summary {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 22px 18px;
+  position: sticky; top: calc(var(--top-h) + 16px);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.calc-summary-head { display: flex; justify-content: space-between; align-items: baseline; }
+.calc-summary-plan { font-weight: 700; font-size: 18px; }
+.calc-summary-tag { font-size: 12px; color: var(--gray-500); }
+.calc-summary-lines { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border-light); padding-top: 14px; }
+.calc-summary-line { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; }
+.calc-summary-line-label { color: var(--gray-700); }
+.calc-summary-line-amt { font-weight: 600; color: var(--black); font-variant-numeric: tabular-nums; }
+.calc-summary-line-muted .calc-summary-line-amt,
+.calc-summary-line-muted .calc-summary-line-label { color: var(--gray-400); }
+.calc-summary-line-over .calc-summary-line-amt { color: #E07800; }
+
+.calc-summary-total { display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--border-light); padding-top: 14px; font-variant-numeric: tabular-nums; }
+.calc-summary-total-row { display: flex; justify-content: space-between; font-size: 13px; }
+.calc-summary-total-row--muted { color: var(--gray-500); }
+.calc-summary-total-row--big { font-size: 22px; font-weight: 800; margin-top: 4px; }
+.calc-summary-effective { font-size: 12px; color: var(--gray-500); text-align: right; }
+
+.calc-summary-tx { font-size: 12px; color: var(--gray-500); background: var(--gray-100); border-radius: 8px; padding: 10px 12px; }
+.calc-summary-tx strong { color: var(--black); }
+
+.calc-summary-cta { display: flex; flex-direction: column; gap: 8px; }
+.calc-btn { width: 100%; padding: 11px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; }
+.calc-summary-toast { font-size: 12px; color: var(--green-dark); text-align: center; }
+
+/* Enterprise plan selected — show talk-to-sales card instead of number */
+.calc-summary.is-enterprise .calc-summary-lines,
+.calc-summary.is-enterprise .calc-summary-total,
+.calc-summary.is-enterprise .calc-summary-tx { display: none; }
+.calc-summary.is-enterprise .calc-summary-plan { color: var(--accent-start); }
+
+/* Mobile: summary becomes a sticky bottom bar */
+@media (max-width: 991px) {
+  .calc-summary { position: fixed; bottom: 0; left: 0; right: 0; top: auto; border-radius: 16px 16px 0 0; z-index: 200; max-height: 62vh; overflow-y: auto; box-shadow: 0 -8px 32px rgba(0,0,0,0.12); }
+  .calc-range-track { grid-template-columns: 1fr; }
+  .calc-range-min, .calc-range-max { text-align: center; }
+  #panel-calculator .calc-config { padding-bottom: 360px; }
+}
 </style>
 </head>
 <body>
@@ -867,7 +1085,7 @@ body.drawer-open .nav-backdrop {
           <span class="dot">·</span>
           <a href="#">Upgrade your plan →</a>
           <span class="dot">·</span>
-          <a href="#">Calculate your price →</a>
+          <a href="#" onclick="show('calculator');return false;">Calculate your price →</a>
         </div>
       </div>
 
@@ -1167,6 +1385,111 @@ body.drawer-open .nav-backdrop {
     </div>
 
     <!-- ─── OMS / WMS ─── -->
+    <!-- CALCULATE YOUR PRICE — pricing playground / bundle builder -->
+    <div class="panel" id="panel-calculator">
+      <div class="section-label">Calculate your price</div>
+      <h1 class="section-title">Fynd your fit.</h1>
+      <p class="section-desc">Mix & match plans, products and usage to see where your business lands on the Fynd Commerce pricing spectrum. Share the link with your team when you're ready to talk.</p>
+
+      <!-- RANGE HERO BAND -->
+      <div class="calc-range" id="calc-range">
+        <div class="calc-range-row">
+          <div class="calc-range-label">Fynd Commerce pricing ranges from</div>
+          <div class="calc-range-badge">Preview pricing · mockup data</div>
+        </div>
+        <div class="calc-range-track">
+          <span class="calc-range-min" id="calc-range-min">—</span>
+          <div class="calc-range-bar">
+            <div class="calc-range-fill"></div>
+            <div class="calc-range-dot" id="calc-range-dot" style="left:0%"></div>
+          </div>
+          <span class="calc-range-max" id="calc-range-max">—</span>
+        </div>
+        <div class="calc-range-meta">
+          <span id="calc-range-here">Configure below to see where you land.</span>
+          <a href="#" onclick="window.__calcBookDemo();return false;" class="calc-range-enterprise">Enterprise: custom pricing →</a>
+        </div>
+      </div>
+
+      <!-- MAIN 3-COL LAYOUT -->
+      <div class="calc-layout">
+
+        <div class="calc-config">
+
+          <!-- Plan chips -->
+          <div class="calc-block">
+            <div class="calc-block-title">① Pick a starting plan</div>
+            <div class="calc-plan-chips" id="calc-plan-chips"><!-- rendered --></div>
+          </div>
+
+          <!-- Billing + region -->
+          <div class="calc-block calc-row-two">
+            <div>
+              <div class="calc-block-title">② Billing</div>
+              <div class="calc-toggle" id="calc-billing-toggle">
+                <button data-v="monthly" class="calc-toggle-btn">Monthly</button>
+                <button data-v="annual"  class="calc-toggle-btn on">Annual · save 20%</button>
+              </div>
+            </div>
+            <div>
+              <div class="calc-block-title">③ Region</div>
+              <div class="calc-toggle" id="calc-country-toggle">
+                <button data-v="IN" class="calc-toggle-btn on">INR</button>
+                <button data-v="US" class="calc-toggle-btn">USD</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add-on products -->
+          <div class="calc-block">
+            <div class="calc-block-title">④ Add products</div>
+            <div class="calc-addons" id="calc-addons"><!-- rendered --></div>
+          </div>
+
+          <!-- Usage sliders -->
+          <div class="calc-block">
+            <div class="calc-block-title">⑤ Usage <span class="calc-hint">· 3 sliders today, extended from the catalog later</span></div>
+            <div class="calc-sliders" id="calc-sliders"><!-- rendered --></div>
+          </div>
+        </div>
+
+        <!-- Quote summary (sticky on desktop) -->
+        <aside class="calc-summary" id="calc-summary">
+          <div class="calc-summary-head">
+            <div class="calc-summary-plan" id="calc-sum-plan">—</div>
+            <div class="calc-summary-tag" id="calc-sum-tag">—</div>
+          </div>
+
+          <ul class="calc-summary-lines" id="calc-sum-lines"><!-- rendered --></ul>
+
+          <div class="calc-summary-total" id="calc-sum-total">
+            <div class="calc-summary-total-row">
+              <span>Subtotal</span>
+              <strong id="calc-sum-subtotal">—</strong>
+            </div>
+            <div class="calc-summary-total-row calc-summary-total-row--muted" id="calc-sum-discount-row" hidden>
+              <span>Annual 20% off</span>
+              <strong id="calc-sum-discount">—</strong>
+            </div>
+            <div class="calc-summary-total-row calc-summary-total-row--big">
+              <span id="calc-sum-total-label">Total</span>
+              <strong id="calc-sum-total-amt">—</strong>
+            </div>
+            <div class="calc-summary-effective" id="calc-sum-effective">—</div>
+          </div>
+
+          <div class="calc-summary-tx" id="calc-sum-tx">—</div>
+
+          <div class="calc-summary-cta">
+            <button class="btn-outline calc-btn" onclick="window.__calcCopyLink()">🔗 Copy share link</button>
+            <button class="btn-dark calc-btn" onclick="window.__calcBookDemo()">Book a demo →</button>
+          </div>
+          <div class="calc-summary-toast" id="calc-sum-toast" hidden>Link copied</div>
+        </aside>
+
+      </div>
+    </div>
+
     <div class="panel" id="panel-oms">
       <div class="section-label">OMS / WMS</div>
       <h1 class="section-title">Order &amp; warehouse management</h1>
@@ -1361,6 +1684,7 @@ function setBilling(m) {
 /* ─── LEFT NAV SWITCHER ───────────────────────────────────────────── */
 const PANEL_LABELS = {
   platform:   'Customer Platform',
+  calculator: 'Calculate your price',
   free:       'Free Tools',
   bundle:     'Create a Bundle',
   smb:        'Fynd for SMBs',
@@ -1435,6 +1759,444 @@ document.addEventListener('keydown', function(e) {
   ham.addEventListener('mouseleave', scheduleClose);
   drawer.addEventListener('mouseenter', cancelClose);
   drawer.addEventListener('mouseleave', scheduleClose);
+})();
+
+/* ─── CALCULATE YOUR PRICE — playground module ─────────────────────── */
+(function Calculator(){
+  let catalog = null;
+  let state = {
+    planId: 'plan_growth',
+    billing: 'annual',
+    country: 'IN',
+    addons: new Set(['prod_pos']),
+    usage: {}   // filled from metrics[] after catalog loads
+  };
+  let inited = false;
+
+  const CURRENCY = { IN: '₹', US: '$' };
+  const intervalOf = (b) => b === 'annual' ? 'year' : 'month';
+
+  function fmt(n, cur){
+    if (n == null || !isFinite(n)) return '—';
+    const sym = CURRENCY[cur || state.country] || '';
+    const v = Math.round(n);
+    return sym + v.toLocaleString('en-IN');
+  }
+
+  function getPriceRow(prices, country, interval){
+    if (!prices) return null;
+    return prices.find(p => p.country === country && p.billingInterval === interval) || null;
+  }
+
+  function planOf(id){ return catalog.plans.find(p => p._id === id); }
+  function metricOf(slug){ return catalog.metrics.find(m => m.slug === slug); }
+  function planMetricValue(plan, slug){
+    const m = metricOf(slug);
+    if (!m) return 0;
+    const pm = plan.planMetrics && plan.planMetrics.find(x => x.productMetricId === m._id);
+    if (!pm) return 0;
+    const v = Number(pm.value);
+    return isNaN(v) ? 0 : v;
+  }
+
+  /* ── Core quote math ──────────────────────────────────────── */
+  function computeQuote(){
+    const plan = planOf(state.planId);
+    if (!plan) return null;
+    const isEnterprise = plan.type === 'custom';
+
+    const baseMonthRow = getPriceRow(plan.prices, state.country, 'month');
+    const baseYearRow  = getPriceRow(plan.prices, state.country, 'year');
+    const baseMonthly = (baseMonthRow && baseMonthRow.unitPriceAmount) || 0;
+    const baseYearly  = (baseYearRow && baseYearRow.unitPriceAmount) || baseMonthly * 12;
+
+    const lines = [];
+    lines.push({ label: plan.name + ' base', amount: baseMonthly });
+
+    let addonsMonthly = 0;
+    state.addons.forEach(pid => {
+      const pp = catalog.productPricing[pid];
+      if (!pp) return;
+      const row = getPriceRow(pp.prices, state.country, 'month');
+      if (!row) return;
+      addonsMonthly += row.unitPriceAmount || 0;
+      const prod = catalog.products.find(p => p._id === pid);
+      lines.push({ label: '+ ' + (prod ? prod.name : pid), amount: row.unitPriceAmount || 0 });
+    });
+
+    // Metric overage (POS devices beyond included)
+    let overageMonthly = 0;
+    catalog.metrics.forEach(m => {
+      if (!m.unitSellPrice) return;
+      // If metric requires a product that's not added, skip
+      if (m.requiresProduct && !state.addons.has(m.requiresProduct) && !plan.includedProducts.includes(m.requiresProduct)) return;
+      const qty = Number(state.usage[m.slug] || 0);
+      const inc = planMetricValue(plan, m.slug);
+      if (qty > inc) {
+        const extra = (qty - inc) * Number(m.unitSellPrice);
+        overageMonthly += extra;
+        lines.push({ label: m.name + ' — ' + (qty - inc) + ' extra × ' + fmt(m.unitSellPrice, state.country), amount: extra, over: true });
+      }
+    });
+
+    const subtotalMonthly = baseMonthly + addonsMonthly + overageMonthly;
+    const subtotalAnnualGross = subtotalMonthly * 12;
+    const discountPct = (catalog.discounts && catalog.discounts.annual && catalog.discounts.annual.amount) || 0;
+    const annualTotal = subtotalAnnualGross * (1 - discountPct / 100);
+    const annualSavings = subtotalAnnualGross - annualTotal;
+    const effectiveMonthly = annualTotal / 12;
+
+    // Transaction fee estimate (info only)
+    const ordersMetric = metricOf('commerce_b2c_orders');
+    const orders = Number(state.usage['commerce_b2c_orders'] || 0);
+    const aov = state.country === 'US'
+      ? (ordersMetric && ordersMetric.assumedAvgOrderValueUSD) || 12
+      : (ordersMetric && ordersMetric.assumedAvgOrderValueINR) || 1000;
+    const txPct = (plan.transactionFee && plan.transactionFee.b2c) || 0;
+    const txMonthly = orders * aov * (txPct / 100);
+
+    return {
+      isEnterprise, plan,
+      baseMonthly, baseYearly,
+      addonsMonthly, overageMonthly,
+      subtotalMonthly, subtotalAnnualGross, annualTotal, annualSavings, effectiveMonthly,
+      discountPct, txMonthly, txPct, orders, aov,
+      lines
+    };
+  }
+
+  /* ── Range hero anchors ───────────────────────────────────── */
+  function computeRange(){
+    const prices = catalog.plans
+      .filter(p => p.type === 'standard' && p.isActive)
+      .map(p => {
+        const r = getPriceRow(p.prices, state.country, 'month');
+        return r ? r.unitPriceAmount : null;
+      })
+      .filter(v => v != null && v >= 0);
+
+    const nonZero = prices.filter(v => v > 0);
+    const min = nonZero.length ? Math.min.apply(null, nonZero) : 0;
+
+    const scale = catalog.plans.find(p => p._id === 'plan_scale');
+    const scaleRow = scale && getPriceRow(scale.prices, state.country, 'month');
+    let max = (scaleRow && scaleRow.unitPriceAmount) || 0;
+
+    Object.entries(catalog.productPricing).forEach(([pid, pp]) => {
+      const paired = (pp.commonlyPairedWith || []).includes('plan_scale');
+      if (!paired) return;
+      const row = getPriceRow(pp.prices, state.country, 'month');
+      if (row) max += row.unitPriceAmount || 0;
+    });
+
+    catalog.metrics.forEach(m => {
+      if (!m.unitSellPrice) return;
+      const high = m.typicalHighEnd || (m.maximumValue ? m.maximumValue / 3 : 0);
+      max += high * Number(m.unitSellPrice);
+    });
+
+    if (state.billing === 'annual') {
+      return { min: min * 12 * 0.8, max: max * 12 * 0.8 };
+    }
+    return { min, max };
+  }
+
+  function rangePosition(subtotalMonthly, range){
+    if (state.billing === 'annual') subtotalMonthly = subtotalMonthly * 12 * 0.8;
+    const lo = Math.max(1, range.min), hi = Math.max(range.min + 1, range.max);
+    const clamped = Math.min(hi, Math.max(lo, subtotalMonthly));
+    const logLo = Math.log(lo), logHi = Math.log(hi), logV = Math.log(clamped);
+    const pct = ((logV - logLo) / (logHi - logLo)) * 100;
+    return Math.min(100, Math.max(0, pct));
+  }
+
+  /* ── Renderers ────────────────────────────────────────────── */
+  function renderPlans(){
+    const root = document.getElementById('calc-plan-chips');
+    if (!root) return;
+    root.innerHTML = catalog.plans.map(p => {
+      const row = getPriceRow(p.prices, state.country, intervalOf(state.billing));
+      let priceLabel = '';
+      if (p.type === 'custom') priceLabel = 'Custom';
+      else if (row && row.unitPriceAmount != null) {
+        priceLabel = fmt(row.unitPriceAmount) + (state.billing === 'annual' ? '/yr' : '/mo');
+      } else priceLabel = '—';
+      const badge = p.badge ? '<div class="calc-plan-badge">' + p.badge + '</div>' : '';
+      return '<button class="calc-plan ' + (p._id === state.planId ? 'on' : '') + '" data-plan="' + p._id + '">'
+           + badge
+           + '<div class="calc-plan-name">' + p.name + '</div>'
+           + '<div class="calc-plan-price">' + priceLabel + '</div>'
+           + '</button>';
+    }).join('');
+  }
+
+  function renderAddons(){
+    const root = document.getElementById('calc-addons');
+    if (!root) return;
+    const plan = planOf(state.planId);
+    const addable = plan.addableProducts || [];
+    root.innerHTML = addable.map(pid => {
+      const prod = catalog.products.find(p => p._id === pid);
+      const pp = catalog.productPricing[pid];
+      const row = pp && getPriceRow(pp.prices, state.country, 'month');
+      const price = row ? fmt(row.unitPriceAmount) + '/mo' : '—';
+      const on = state.addons.has(pid);
+      return '<div class="calc-addon ' + (on ? 'on' : '') + '">'
+           + '<div class="calc-addon-main">'
+           +   '<div class="calc-addon-name">' + (prod ? prod.name : pid) + '</div>'
+           +   '<div class="calc-addon-desc">' + (prod && prod.description ? prod.description : '') + '</div>'
+           + '</div>'
+           + '<div class="calc-addon-price">' + price + '</div>'
+           + '<button class="calc-addon-btn" data-addon="' + pid + '">' + (on ? '✓ Added' : '+ Add') + '</button>'
+           + '</div>';
+    }).join('');
+    // Enterprise: everything is included, no addons
+    if (plan.type === 'custom') {
+      root.innerHTML = '<div class="calc-addon" style="opacity:0.7"><div class="calc-addon-main"><div class="calc-addon-name">All products included</div><div class="calc-addon-desc">Enterprise plans bundle every Fynd Commerce product.</div></div></div>';
+    }
+  }
+
+  function renderSliders(){
+    const root = document.getElementById('calc-sliders');
+    if (!root) return;
+    const plan = planOf(state.planId);
+    root.innerHTML = catalog.metrics.map(m => {
+      if (m.requiresProduct && !state.addons.has(m.requiresProduct) && !plan.includedProducts.includes(m.requiresProduct)) {
+        return '<div class="calc-slider-row" style="opacity:0.4">'
+             + '<div class="calc-slider-head"><span class="calc-slider-name">' + m.name + '</span><span class="calc-slider-val">Add ' + (catalog.products.find(p => p._id === m.requiresProduct)||{name:''}).name + ' to tune</span></div>'
+             + '</div>';
+      }
+      const inc = planMetricValue(plan, m.slug);
+      const qty = state.usage[m.slug] != null ? state.usage[m.slug] : (m.defaultValue || 0);
+      const meta = [];
+      if (inc > 0) meta.push('<em>' + inc + ' incl.</em>');
+      if (m.unitSellPrice) meta.push('Beyond that: ' + fmt(m.unitSellPrice) + ' / ' + (m.unit || 'unit'));
+      if (m.slug === 'commerce_b2c_orders') meta.push('Txn fee estimated separately');
+      return '<div class="calc-slider-row" data-slug="' + m.slug + '">'
+           + '<div class="calc-slider-head">'
+           +   '<span class="calc-slider-name">' + m.name + '</span>'
+           +   '<span class="calc-slider-val" data-val>' + qty.toLocaleString('en-IN') + ' <span style="color:var(--gray-400);font-size:12px;font-weight:500">' + (m.unit || '') + '</span></span>'
+           + '</div>'
+           + '<input type="range" class="calc-slider-input" min="' + m.minimumValue + '" max="' + m.maximumValue + '" value="' + qty + '" data-metric="' + m.slug + '">'
+           + '<div class="calc-slider-meta"><span>' + m.minimumValue.toLocaleString('en-IN') + '</span><span>' + meta.join(' · ') + '</span><span>' + m.maximumValue.toLocaleString('en-IN') + '</span></div>'
+           + '</div>';
+    }).join('');
+  }
+
+  function renderSummary(){
+    const q = computeQuote();
+    if (!q) return;
+    const sum = document.getElementById('calc-summary');
+    sum.classList.toggle('is-enterprise', q.isEnterprise);
+
+    document.getElementById('calc-sum-plan').textContent = q.plan.name;
+    document.getElementById('calc-sum-tag').textContent = state.billing === 'annual' ? 'Annual billing' : 'Monthly billing';
+
+    if (q.isEnterprise) {
+      document.getElementById('calc-sum-lines').innerHTML = '';
+      document.getElementById('calc-sum-tx').innerHTML = '<strong>Enterprise pricing</strong> is tailored to your GMV, SLAs, and integrations. Let\'s talk.';
+      document.getElementById('calc-sum-tx').style.display = 'block';
+    } else {
+      document.getElementById('calc-sum-lines').innerHTML = q.lines.map(l => {
+        const cls = 'calc-summary-line' + (l.over ? ' calc-summary-line-over' : '');
+        return '<li class="' + cls + '"><span class="calc-summary-line-label">' + l.label + '</span><span class="calc-summary-line-amt">' + fmt(l.amount) + '/mo</span></li>';
+      }).join('');
+
+      document.getElementById('calc-sum-subtotal').textContent = fmt(q.subtotalMonthly) + '/mo';
+      const discountRow = document.getElementById('calc-sum-discount-row');
+      if (state.billing === 'annual') {
+        discountRow.hidden = false;
+        document.getElementById('calc-sum-discount').textContent = '− ' + fmt(q.annualSavings) + '/yr';
+        document.getElementById('calc-sum-total-label').textContent = 'Total / year';
+        document.getElementById('calc-sum-total-amt').textContent = fmt(q.annualTotal);
+        document.getElementById('calc-sum-effective').textContent = '≈ ' + fmt(q.effectiveMonthly) + '/mo effective';
+      } else {
+        discountRow.hidden = true;
+        document.getElementById('calc-sum-total-label').textContent = 'Total / month';
+        document.getElementById('calc-sum-total-amt').textContent = fmt(q.subtotalMonthly);
+        document.getElementById('calc-sum-effective').textContent = '';
+      }
+
+      const txBox = document.getElementById('calc-sum-tx');
+      if (q.txMonthly > 0) {
+        txBox.style.display = 'block';
+        txBox.innerHTML = 'At <strong>' + q.orders.toLocaleString('en-IN') + '</strong> orders/mo × ~' + fmt(q.aov) + ' AOV × <strong>' + q.txPct + '%</strong> B2C txn fee ≈ <strong>' + fmt(q.txMonthly) + '/mo</strong> in transaction fees';
+      } else {
+        txBox.innerHTML = 'B2C transaction fee: <strong>' + q.txPct + '%</strong> on paid orders (drag Orders slider to estimate)';
+      }
+    }
+
+    // Range hero
+    const range = computeRange();
+    const suffix = state.billing === 'annual' ? '/yr' : '/mo';
+    document.getElementById('calc-range-min').textContent = range.min > 0 ? fmt(range.min) + suffix : '—';
+    document.getElementById('calc-range-max').textContent = range.max > 0 ? fmt(range.max) + suffix : '—';
+    const pos = rangePosition(q.subtotalMonthly, range);
+    document.getElementById('calc-range-dot').style.left = pos + '%';
+
+    const addons = Array.from(state.addons).map(pid => (catalog.products.find(p => p._id === pid) || {}).name).filter(Boolean);
+    const summary = q.plan.name
+      + (addons.length ? ' + ' + addons.join(' + ') : '')
+      + (q.orders ? ' · ' + q.orders.toLocaleString('en-IN') + ' orders/mo' : '');
+    document.getElementById('calc-range-here').textContent = q.isEnterprise
+      ? 'Enterprise is custom — not plotted on this range.'
+      : 'Your setup: ' + summary;
+
+    updateHash();
+  }
+
+  /* ── URL hash sync ─────────────────────────────────────────── */
+  function updateHash(){
+    const compact = {
+      p: state.planId.replace('plan_', ''),
+      b: state.billing === 'annual' ? 'a' : 'm',
+      c: state.country,
+      a: Array.from(state.addons).map(s => s.replace('prod_', '')),
+      u: state.usage
+    };
+    try {
+      const enc = btoa(JSON.stringify(compact));
+      if (location.hash !== '#calc=' + enc && document.getElementById('panel-calculator').classList.contains('active')) {
+        history.replaceState(null, '', '#calc=' + enc);
+      }
+    } catch(e) {}
+  }
+
+  function hydrateFromHash(){
+    const h = location.hash || '';
+    const m = h.match(/^#calc=(.+)$/);
+    if (!m) return false;
+    try {
+      const obj = JSON.parse(atob(m[1]));
+      if (obj.p) state.planId = 'plan_' + obj.p;
+      if (obj.b) state.billing = obj.b === 'a' ? 'annual' : 'monthly';
+      if (obj.c) state.country = obj.c;
+      if (Array.isArray(obj.a)) state.addons = new Set(obj.a.map(s => 'prod_' + s));
+      if (obj.u && typeof obj.u === 'object') state.usage = obj.u;
+      return true;
+    } catch(e) { return false; }
+  }
+
+  /* ── Event bindings ───────────────────────────────────────── */
+  function bind(){
+    const panel = document.getElementById('panel-calculator');
+    panel.addEventListener('click', function(e){
+      const planBtn = e.target.closest('[data-plan]');
+      if (planBtn) {
+        state.planId = planBtn.getAttribute('data-plan');
+        // auto-add includedProducts for Enterprise etc.
+        renderAll();
+        return;
+      }
+      const addonBtn = e.target.closest('[data-addon]');
+      if (addonBtn) {
+        const pid = addonBtn.getAttribute('data-addon');
+        if (state.addons.has(pid)) state.addons.delete(pid);
+        else state.addons.add(pid);
+        renderAddons();
+        renderSliders();
+        renderSummary();
+        return;
+      }
+      const tog = e.target.closest('[data-v]');
+      if (tog) {
+        const parent = tog.parentElement;
+        const v = tog.getAttribute('data-v');
+        if (parent.id === 'calc-billing-toggle') {
+          state.billing = v;
+          // Also flip the global billing for consistency with main pricing cards
+          if (typeof setBilling === 'function') setBilling(v);
+        }
+        if (parent.id === 'calc-country-toggle') state.country = v;
+        parent.querySelectorAll('.calc-toggle-btn').forEach(b => b.classList.toggle('on', b === tog));
+        renderPlans();
+        renderAddons();
+        renderSliders();
+        renderSummary();
+      }
+    });
+
+    panel.addEventListener('input', function(e){
+      const slider = e.target.closest('input[data-metric]');
+      if (!slider) return;
+      const slug = slider.getAttribute('data-metric');
+      const val = Number(slider.value);
+      state.usage[slug] = val;
+      const row = slider.closest('.calc-slider-row');
+      const valEl = row.querySelector('[data-val]');
+      const metric = metricOf(slug);
+      if (valEl) valEl.innerHTML = val.toLocaleString('en-IN') + ' <span style="color:var(--gray-400);font-size:12px;font-weight:500">' + (metric.unit || '') + '</span>';
+      renderSummary();
+    });
+
+    window.addEventListener('hashchange', function(){
+      if (hydrateFromHash()) {
+        renderAll();
+      }
+    });
+  }
+
+  function renderAll(){
+    renderPlans();
+    renderAddons();
+    renderSliders();
+    renderSummary();
+  }
+
+  window.__calcCopyLink = function(){
+    if (!inited) return;
+    updateHash();
+    const url = location.origin + location.pathname + location.hash;
+    const toast = document.getElementById('calc-sum-toast');
+    function show(msg){
+      if (toast) { toast.textContent = msg; toast.hidden = false; setTimeout(function(){ toast.hidden = true; }, 1800); }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function(){ show('Link copied'); }, function(){ show('Copy failed — ' + url); });
+    } else {
+      try {
+        const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta); show('Link copied');
+      } catch(e) { show('Copy failed'); }
+    }
+  };
+  window.__calcBookDemo = function(){
+    // Reuses the top-right "Book a demo" — emit a scroll/click to that button if it exists
+    const existing = document.querySelector('.topnav .btn-dark, .topnav a[href*="demo" i], .cta-book-demo, .js-book-demo');
+    if (existing && typeof existing.click === 'function') { existing.click(); return; }
+    alert('Book a demo — our sales team will reach out shortly.');
+  };
+
+  async function ensureInit(){
+    if (inited) return;
+    try {
+      const res = await fetch('./data/catalog.json', { cache: 'no-store' });
+      catalog = await res.json();
+    } catch(e) {
+      console.error('Failed to load catalog.json', e);
+      return;
+    }
+    // seed default usage values
+    catalog.metrics.forEach(m => {
+      if (state.usage[m.slug] == null) state.usage[m.slug] = m.defaultValue || 0;
+    });
+    hydrateFromHash();
+    bind();
+    inited = true;
+    renderAll();
+  }
+
+  // Hook into show() so the calculator lazy-initialises on first open
+  const originalShow = window.show;
+  window.show = function(id){
+    if (typeof originalShow === 'function') originalShow(id);
+    if (id === 'calculator') ensureInit();
+  };
+
+  // Auto-open on #calc= hash
+  if ((location.hash || '').startsWith('#calc=')) {
+    document.addEventListener('DOMContentLoaded', function(){ window.show('calculator'); });
+  }
 })();
 </script>
 

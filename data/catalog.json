@@ -1,0 +1,243 @@
+{
+  "meta": {
+    "version": "1.0.0-v1",
+    "source": "sheet-mockup-v1",
+    "sourceFile": "data/pricing-sheet.json",
+    "currency": "INR",
+    "generatedAt": "2026-04-17",
+    "note": "MOCKUP data. Eventual source of truth = console endpoints (tokyo /v1/plans?include=prices,metrics + charmander /v1/products?include=metrics). See docs/CATALOG_HANDOVER.md."
+  },
+
+  "products": [
+    { "_id": "prod_storefront", "name": "Storefront",        "slug": "storefront", "description": "D2C commerce with web & app storefronts" },
+    { "_id": "prod_pos",        "name": "Store OS / POS",    "slug": "pos",        "description": "In-store billing, offline POS, device + user subscriptions" },
+    { "_id": "prod_konnect",    "name": "Fynd Konnect",      "slug": "konnect",    "description": "Sell on marketplaces (Amazon, Flipkart, Myntra), inventory sync" },
+    { "_id": "prod_logistics",  "name": "Managed Logistics", "slug": "logistics",  "description": "Fynd-managed shipping, NDR automation, insurance (India only)" },
+    { "_id": "prod_ai",         "name": "AI Studio",         "slug": "ai",         "description": "Image/video generation, AI-powered storefront sections" },
+    { "_id": "prod_engage",     "name": "Fynd Engage",       "slug": "engage",     "description": "Loyalty, Email & SMS campaigns, customer segmentation" }
+  ],
+
+  "metrics": [
+    {
+      "_id": "m_orders",
+      "slug": "commerce_b2c_orders",
+      "name": "B2C Orders / month",
+      "productId": "prod_storefront",
+      "valueType": "number",
+      "unit": "orders",
+      "minimumValue": 0,
+      "maximumValue": 50000,
+      "defaultValue": 500,
+      "sliderScale": "log",
+      "typicalHighEnd": 10000,
+      "driver": "transaction_fee",
+      "assumedAvgOrderValueINR": 1000,
+      "assumedAvgOrderValueUSD": 12,
+      "description": "Transaction fee applies to every D2C order. Estimate shown separately in summary."
+    },
+    {
+      "_id": "m_locations",
+      "slug": "commerce_fulfillment_location_count",
+      "name": "Fulfilment locations",
+      "productId": "prod_storefront",
+      "valueType": "number",
+      "unit": "locations",
+      "minimumValue": 1,
+      "maximumValue": 50,
+      "defaultValue": 5,
+      "sliderScale": "linear",
+      "typicalHighEnd": 15,
+      "description": "Warehouses / stores dispatching orders. All paid plans include 10; beyond that is a custom conversation."
+    },
+    {
+      "_id": "m_pos_devices",
+      "slug": "pos_subscription_device_count",
+      "name": "POS devices",
+      "productId": "prod_pos",
+      "valueType": "number",
+      "unit": "devices",
+      "minimumValue": 0,
+      "maximumValue": 100,
+      "defaultValue": 1,
+      "sliderScale": "linear",
+      "typicalHighEnd": 10,
+      "unitSellPrice": 2500,
+      "unitSellPriceCurrency": "INR",
+      "unitSellPriceUSD": 30,
+      "requiresProduct": "prod_pos",
+      "description": "Each additional POS device is billed at ₹2,500/mo ($30). First device is included when POS is added."
+    }
+  ],
+
+  "plans": [
+    {
+      "_id": "plan_starter",
+      "name": "Starter",
+      "description": "Essential commerce for new & growing D2C brands.",
+      "type": "standard",
+      "isActive": true,
+      "isFeatured": false,
+      "order": 1,
+      "transactionFee": { "b2c": 2.5, "b2b": null, "displayNote": "2.5% B2C transaction fee" },
+      "includedProducts": ["prod_storefront"],
+      "addableProducts":  ["prod_pos", "prod_konnect", "prod_logistics", "prod_ai", "prod_engage"],
+      "planMetrics": [
+        { "productMetricId": "m_orders",      "value": "0",   "category": "Orders",    "displayValue": "Pay per order (via txn fee)" },
+        { "productMetricId": "m_locations",   "value": "10",  "category": "Fulfilment", "displayValue": "10 locations incl." },
+        { "productMetricId": "m_pos_devices", "value": "1",   "category": "POS",        "displayValue": "1 device incl. when POS added" }
+      ],
+      "highlights": [
+        "10 fulfilment locations",
+        "Payment gateways",
+        "Custom domain",
+        "Shipping zones & rules",
+        "Product bundles & coupons",
+        "3 geography pricing zones"
+      ],
+      "prices": [
+        { "country": "IN", "currency": "INR", "billingInterval": "month", "unitPriceAmount": 1499  },
+        { "country": "IN", "currency": "INR", "billingInterval": "year",  "unitPriceAmount": 11111 },
+        { "country": "US", "currency": "USD", "billingInterval": "month", "unitPriceAmount": 49    },
+        { "country": "US", "currency": "USD", "billingInterval": "year",  "unitPriceAmount": 399   }
+      ]
+    },
+    {
+      "_id": "plan_growth",
+      "name": "Growth",
+      "description": "For omnichannel retailers scaling online & offline.",
+      "type": "standard",
+      "isActive": true,
+      "isFeatured": true,
+      "badge": "Most popular",
+      "order": 2,
+      "transactionFee": { "b2c": 2.0, "b2b": null, "displayNote": "2.0% B2C transaction fee" },
+      "includedProducts": ["prod_storefront"],
+      "addableProducts":  ["prod_pos", "prod_konnect", "prod_logistics", "prod_ai", "prod_engage"],
+      "planMetrics": [
+        { "productMetricId": "m_orders",      "value": "0",   "category": "Orders",    "displayValue": "Pay per order (via txn fee)" },
+        { "productMetricId": "m_locations",   "value": "10",  "category": "Fulfilment", "displayValue": "10 locations incl." },
+        { "productMetricId": "m_pos_devices", "value": "1",   "category": "POS",        "displayValue": "1 device incl. when POS added" }
+      ],
+      "highlights": [
+        "Everything in Starter",
+        "Quick Commerce on Fynd",
+        "Map-based shipping zones",
+        "Loyalty (Fynd Engage)",
+        "Email & SMS campaigns",
+        "Full webhook & API access"
+      ],
+      "prices": [
+        { "country": "IN", "currency": "INR", "billingInterval": "month", "unitPriceAmount": 2999  },
+        { "country": "IN", "currency": "INR", "billingInterval": "year",  "unitPriceAmount": 22222 },
+        { "country": "US", "currency": "USD", "billingInterval": "month", "unitPriceAmount": 99    },
+        { "country": "US", "currency": "USD", "billingInterval": "year",  "unitPriceAmount": 799   }
+      ]
+    },
+    {
+      "_id": "plan_scale",
+      "name": "Scale",
+      "description": "For multi-store operators and high-volume merchants.",
+      "type": "standard",
+      "isActive": true,
+      "isFeatured": false,
+      "order": 3,
+      "transactionFee": { "b2c": 1.5, "b2b": null, "displayNote": "1.5% B2C transaction fee" },
+      "includedProducts": ["prod_storefront"],
+      "addableProducts":  ["prod_pos", "prod_konnect", "prod_logistics", "prod_ai", "prod_engage"],
+      "planMetrics": [
+        { "productMetricId": "m_orders",      "value": "0",   "category": "Orders",    "displayValue": "Pay per order (via txn fee)" },
+        { "productMetricId": "m_locations",   "value": "10",  "category": "Fulfilment", "displayValue": "10 locations incl." },
+        { "productMetricId": "m_pos_devices", "value": "1",   "category": "POS",        "displayValue": "1 device incl. when POS added" }
+      ],
+      "highlights": [
+        "Everything in Growth",
+        "Merchandising rules",
+        "Per-zone pricing overage",
+        "Custom shipping rules",
+        "Custom order routing",
+        "Priority support response"
+      ],
+      "prices": [
+        { "country": "IN", "currency": "INR", "billingInterval": "month", "unitPriceAmount": 3999  },
+        { "country": "IN", "currency": "INR", "billingInterval": "year",  "unitPriceAmount": 33333 },
+        { "country": "US", "currency": "USD", "billingInterval": "month", "unitPriceAmount": 129   },
+        { "country": "US", "currency": "USD", "billingInterval": "year",  "unitPriceAmount": 1199  }
+      ]
+    },
+    {
+      "_id": "plan_enterprise",
+      "name": "Enterprise",
+      "description": "For large retail chains, marketplaces & complex operations.",
+      "type": "custom",
+      "isActive": true,
+      "isFeatured": false,
+      "order": 4,
+      "transactionFee": { "b2c": 0.25, "b2b": null, "displayNote": "Competitive rates starting at 0.25%" },
+      "includedProducts": ["prod_storefront", "prod_pos", "prod_konnect", "prod_logistics", "prod_ai", "prod_engage"],
+      "addableProducts": [],
+      "planMetrics": [],
+      "highlights": [
+        "Everything in Scale",
+        "Dedicated Account Manager",
+        "Sandbox Storefront & POS",
+        "Custom checkout experience",
+        "Custom analytics",
+        "B2B storefront · Build your marketplace",
+        "24×7 customer support"
+      ],
+      "prices": [
+        { "country": "IN", "currency": "INR", "billingInterval": "month", "unitPriceAmount": null, "displayValue": "Custom" },
+        { "country": "IN", "currency": "INR", "billingInterval": "year",  "unitPriceAmount": null, "displayValue": "Custom" }
+      ]
+    }
+  ],
+
+  "productPricing": {
+    "prod_pos": {
+      "prices": [
+        { "country": "IN", "currency": "INR", "billingInterval": "month", "unitPriceAmount": 2500 },
+        { "country": "IN", "currency": "INR", "billingInterval": "year",  "unitPriceAmount": 25000 },
+        { "country": "US", "currency": "USD", "billingInterval": "month", "unitPriceAmount": 30 }
+      ],
+      "includesFirstUnit": true,
+      "commonlyPairedWith": ["plan_growth", "plan_scale"],
+      "description": "Per ordering location subscription. First device included."
+    },
+    "prod_konnect": {
+      "prices": [
+        { "country": "IN", "currency": "INR", "billingInterval": "month", "unitPriceAmount": 999 },
+        { "country": "IN", "currency": "INR", "billingInterval": "year",  "unitPriceAmount": 9990 },
+        { "country": "US", "currency": "USD", "billingInterval": "month", "unitPriceAmount": 15 }
+      ],
+      "commonlyPairedWith": ["plan_scale"]
+    },
+    "prod_logistics": {
+      "prices": [
+        { "country": "IN", "currency": "INR", "billingInterval": "month", "unitPriceAmount": 1499 },
+        { "country": "IN", "currency": "INR", "billingInterval": "year",  "unitPriceAmount": 14990 }
+      ],
+      "commonlyPairedWith": ["plan_growth", "plan_scale"],
+      "geoRestriction": "IN"
+    },
+    "prod_ai": {
+      "prices": [
+        { "country": "IN", "currency": "INR", "billingInterval": "month", "unitPriceAmount": 1299 },
+        { "country": "IN", "currency": "INR", "billingInterval": "year",  "unitPriceAmount": 12990 },
+        { "country": "US", "currency": "USD", "billingInterval": "month", "unitPriceAmount": 19 }
+      ],
+      "commonlyPairedWith": []
+    },
+    "prod_engage": {
+      "prices": [
+        { "country": "IN", "currency": "INR", "billingInterval": "month", "unitPriceAmount": 799 },
+        { "country": "IN", "currency": "INR", "billingInterval": "year",  "unitPriceAmount": 7990 },
+        { "country": "US", "currency": "USD", "billingInterval": "month", "unitPriceAmount": 12 }
+      ],
+      "commonlyPairedWith": ["plan_growth", "plan_scale"]
+    }
+  },
+
+  "discounts": {
+    "annual": { "type": "percentage", "amount": 20, "displayNote": "Save 20% with annual billing" }
+  }
+}
