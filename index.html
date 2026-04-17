@@ -1085,7 +1085,7 @@ body.drawer-open .nav-backdrop {
           <span class="dot">·</span>
           <a href="#">Upgrade your plan →</a>
           <span class="dot">·</span>
-          <a href="#" onclick="show('calculator');return false;">Calculate your price →</a>
+          <a href="#calculator" onclick="show('calculator');return false;">Calculate your price →</a>
         </div>
       </div>
 
@@ -2193,10 +2193,20 @@ document.addEventListener('keydown', function(e) {
     if (id === 'calculator') ensureInit();
   };
 
-  // Auto-open on #calc= hash
-  if ((location.hash || '').startsWith('#calc=')) {
-    document.addEventListener('DOMContentLoaded', function(){ window.show('calculator'); });
+  // Auto-open on #calc= (shared state) or #calculator (plain entry)
+  function openFromHash(){
+    const h = location.hash || '';
+    if (h.startsWith('#calc=') || h === '#calculator') {
+      window.show('calculator');
+    }
   }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', openFromHash);
+  } else {
+    openFromHash();
+  }
+  // Also react to manual hash edits in the address bar
+  window.addEventListener('hashchange', openFromHash);
 })();
 </script>
 
