@@ -117,7 +117,12 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   background: var(--white); border-bottom: 1px solid var(--border);
   display: flex; align-items: center;
   justify-content: center;
-  padding: 0 24px; gap: 14px;
+  padding: 0 24px; gap: 16px;
+}
+.billing-bar-sep {
+  width: 1px; height: 22px;
+  background: var(--border);
+  align-self: center;
 }
 .toggle-group {
   display: inline-flex;
@@ -126,20 +131,22 @@ button { font-family: var(--font); cursor: pointer; border: none; background: no
   border-radius: 100px; padding: 3px;
 }
 .toggle-btn {
+  display: inline-flex; align-items: center; gap: 6px;
   font-size: 13px; font-weight: 500;
-  padding: 5px 18px; border-radius: 100px;
+  padding: 5px 16px; border-radius: 100px;
   color: var(--gray-400); background: transparent; border: none;
   cursor: pointer; transition: all .18s;
+  line-height: 1.4;
 }
 .toggle-btn.on {
   background: var(--white); color: var(--black);
   box-shadow: 0 1px 4px rgba(0,0,0,.1);
 }
-.save-tag {
-  font-size: 11px; font-weight: 600; letter-spacing: .03em;
+.toggle-save-pill {
+  font-size: 10px; font-weight: 700; letter-spacing: .03em;
   color: var(--green-mid); background: var(--green-tint);
-  border: 1px solid rgba(0,150,58,.16);
-  padding: 3px 10px; border-radius: 100px;
+  padding: 1px 7px; border-radius: 100px;
+  line-height: 1.5;
 }
 .billing-note { font-size: 12px; color: var(--gray-400); }
 
@@ -241,6 +248,7 @@ body.drawer-open { overflow: hidden; }
   max-width: 100%;
 }
 .promo-banner-wrap { text-align: center; }
+.promo-banner[hidden] { display: none; }
 .promo-banner b {
   color: #1E40AF; font-weight: 600; font-size: 12px;
   white-space: nowrap;
@@ -1001,9 +1009,12 @@ body.drawer-open .nav-backdrop {
 <div class="billing-bar">
   <div class="toggle-group" role="group" aria-label="Billing period">
     <button class="toggle-btn on" id="btn-m" onclick="setBilling('monthly')">Monthly</button>
-    <button class="toggle-btn" id="btn-a" onclick="setBilling('annual')">Yearly</button>
+    <button class="toggle-btn" id="btn-a" onclick="setBilling('annual')">
+      Yearly
+      <span class="toggle-save-pill">Save 25%</span>
+    </button>
   </div>
-  <span class="save-tag" id="js-save-tag">Save 25% on yearly</span>
+  <span class="billing-bar-sep" aria-hidden="true"></span>
   <div class="toggle-group" role="group" aria-label="Currency" id="js-currency-group">
     <button class="toggle-btn on" id="btn-cur-inr" onclick="setCurrency('INR')">INR</button>
     <button class="toggle-btn" id="btn-cur-usd" onclick="setCurrency('USD')">USD</button>
@@ -1700,8 +1711,6 @@ function setBilling(m) {
   mode = m;
   document.getElementById('btn-a').classList.toggle('on', isYearlyCycle(m));
   document.getElementById('btn-m').classList.toggle('on', m==='monthly');
-  // Show the "Save 25% on yearly" nudge while user is viewing monthly
-  document.getElementById('js-save-tag').hidden = isYearlyCycle(m);
   // Non-platform panel cards still use data-a / data-m toggles
   document.querySelectorAll('.pp').forEach(el => el.textContent = isYearlyCycle(m) ? el.dataset.a : el.dataset.m);
   document.querySelectorAll('.pq').forEach(el => el.textContent = isYearlyCycle(m) ? el.dataset.a : el.dataset.m);
@@ -1720,8 +1729,11 @@ function setCurrency(c) {
 }
 
 function renderPromoBanner() {
+  const banner = document.getElementById('js-promo-banner');
   const copy = document.getElementById('js-promo-copy');
-  if (!copy) return;
+  if (!banner || !copy) return;
+  // The banner's whole purpose is to nudge yearly — hide once user is on yearly.
+  banner.hidden = isYearlyCycle(mode);
   const starter = PLAN_BY_ID.starter;
   const sym = currencySymbol(currency);
   const m = starter[currency].monthly;
