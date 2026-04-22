@@ -394,13 +394,72 @@ body.drawer-open { overflow: hidden; }
   font-size: 20px; font-weight: 700; letter-spacing: -.4px;
   color: var(--black); margin-bottom: 4px;
 }
-.compare-sub { font-size: 13px; color: var(--gray-400); }
-.compare-sub a {
-  color: var(--accent-mid); font-weight: 500; margin-left: 6px;
-  border-bottom: 1px solid rgba(78,82,242,.28);
-  transition: border-color .14s;
+.compare-sub { font-size: 13px; color: var(--gray-500); }
+
+/* Search + actions row above the table */
+.compare-controls {
+  display: flex; align-items: center; gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
 }
-.compare-sub a:hover { border-color: var(--accent-start); }
+.compare-search {
+  flex: 1 1 260px; min-width: 0;
+  position: relative;
+}
+.compare-search-input {
+  width: 100%;
+  font-family: var(--font); font-size: 13px;
+  color: var(--black);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 9px 14px 9px 36px;
+  outline: none;
+  transition: border-color .14s, box-shadow .14s;
+}
+.compare-search-input::placeholder { color: var(--gray-400); }
+.compare-search-input:focus {
+  border-color: var(--accent-mid);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+.compare-search-icon {
+  position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+  color: var(--gray-400); pointer-events: none;
+  line-height: 0;
+}
+.compare-search-clear {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  display: none;
+  font-size: 13px; color: var(--gray-500);
+  width: 22px; height: 22px; border-radius: 999px;
+  align-items: center; justify-content: center;
+  cursor: pointer; border: none; background: var(--gray-100);
+  padding: 0;
+}
+.compare-search-clear:hover { background: var(--gray-200); color: var(--black); }
+.compare-search.has-value .compare-search-clear { display: inline-flex; }
+
+.compare-expand-btn {
+  font-family: var(--font);
+  font-size: 13px; font-weight: 500;
+  color: var(--gray-700);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: border-color .14s, color .14s, background .14s;
+  white-space: nowrap;
+}
+.compare-expand-btn:hover { border-color: var(--gray-400); color: var(--black); }
+.compare-expand-btn:focus { outline: none; border-color: var(--accent-mid); box-shadow: 0 0 0 3px var(--accent-tint); }
+
+.compare-no-results {
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 13px; color: var(--gray-500);
+  background: var(--white);
+}
 
 .tbl-outer {
   border: 1px solid var(--border);
@@ -424,18 +483,32 @@ td {
   color: var(--gray-500); vertical-align: middle;
 }
 td:not(:first-child) { text-align: center; color: var(--black); }
-.cat-tr { background: var(--gray-100) !important; cursor: pointer; user-select: none; }
+.cat-tr { background: var(--gray-100) !important; cursor: pointer; user-select: none; transition: background .14s; }
+.cat-tr:hover { background: #EDEDE8 !important; }
 .cat-tr td {
-  font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .1em; color: var(--gray-400); padding: 9px 16px;
+  font-size: 13px; font-weight: 600; color: var(--black);
+  padding: 12px 16px;
 }
-.cat-tr td:first-child {
+.cat-row {
   display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; width: 100%;
 }
-.cat-tr td:first-child::after {
-  content: '▾'; font-size: 9px; transition: transform .2s;
+.cat-name { display: inline-flex; align-items: center; gap: 10px; }
+.cat-count {
+  font-size: 11px; font-weight: 600;
+  color: var(--gray-500);
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 999px;
 }
-.cat-tr.closed td:first-child::after { transform: rotate(-90deg); }
+.cat-caret {
+  font-size: 10px; color: var(--gray-500);
+  transition: transform .2s;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px;
+}
+.cat-tr.closed .cat-caret { transform: rotate(-90deg); }
 .c-yes { color: var(--green); font-weight: 700; font-size: 14px; }
 .c-no  { color: var(--gray-300); font-size: 15px; }
 .c-add { font-size: 11px; font-weight: 500; color: #9A5800; background: #FFF3D0; padding: 2px 7px; border-radius: 4px; display: inline-block; }
@@ -1201,8 +1274,29 @@ body.drawer-open .nav-backdrop {
         <div class="compare-head">
           <div>
             <div class="compare-title">Compare all features</div>
-            <div class="compare-sub">Tap a category to expand. <a href="#" id="js-expand-all" onclick="toggleAllCategories(event)">Expand all →</a></div>
+            <div class="compare-sub">Search for a feature, or click a category to expand.</div>
           </div>
+        </div>
+        <div class="compare-controls">
+          <div class="compare-search" id="js-compare-search-wrap">
+            <span class="compare-search-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M10.6 10.6L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <input
+              type="search"
+              class="compare-search-input"
+              id="js-compare-search"
+              placeholder="Search features — e.g. shipping, POS, webhooks"
+              aria-label="Search features"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="compare-search-clear" id="js-compare-search-clear" type="button" aria-label="Clear search">×</button>
+          </div>
+          <button class="compare-expand-btn" id="js-expand-all" type="button" onclick="toggleAllCategories(event)">Expand all</button>
         </div>
         <div class="tbl-outer">
           <div class="tbl-scroll">
@@ -1608,58 +1702,148 @@ function cell(v) {
   if(v==='Custom') return `<span class="c-cus">Custom</span>`;
   return `<span class="c-txt">${v}</span>`;
 }
+/* Format a category name from ALL CAPS source to Sentence case for display. */
+function titleCaseCat(g) {
+  return g.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+}
+
 function buildTable(id) {
   const b = document.getElementById(id); if(!b) return;
   b.innerHTML = '';
-  T.forEach(group => {
+  T.forEach((group, idx) => {
     const hr = document.createElement('tr');
-    /* Default: COLLAPSED — features hidden until user taps */
-    hr.className = 'cat-tr closed'; hr.dataset.g = group.g;
-    hr.innerHTML = `<td colspan="5">${group.g}</td>`;
+    /* Open the first category by default so a new visitor sees real
+     * comparison content immediately and understands the pattern. */
+    const defaultClosed = idx !== 0;
+    hr.className = 'cat-tr' + (defaultClosed ? ' closed' : '');
+    hr.dataset.g = group.g;
+    hr.innerHTML = `<td colspan="5"><div class="cat-row">`
+      + `<span class="cat-name">${titleCaseCat(group.g)} <span class="cat-count">${group.rows.length}</span></span>`
+      + `<span class="cat-caret" aria-hidden="true">▾</span>`
+      + `</div></td>`;
     hr.onclick = function() {
       const c = this.classList.toggle('closed');
-      b.querySelectorAll(`[data-gm="${group.g}"]`).forEach(r => r.style.display = c ? 'none' : '');
+      b.querySelectorAll(`[data-gm="${group.g}"]`).forEach(r => {
+        if (r.dataset.filtered === 'out') return; /* respect search filter */
+        r.style.display = c ? 'none' : '';
+      });
       syncExpandAllLabel();
     };
     b.appendChild(hr);
     group.rows.forEach(([f,ft,st,gr,sc,en]) => {
       const r = document.createElement('tr');
       r.dataset.gm = group.g;
-      r.style.display = 'none'; /* Default hidden under closed category */
+      r.dataset.feature = f.toLowerCase();
+      if (defaultClosed) r.style.display = 'none';
       r.innerHTML = `<td>${f}</td><td>${cell(st)}</td><td>${cell(gr)}</td><td>${cell(sc)}</td><td>${cell(en)}</td>`;
       b.appendChild(r);
     });
   });
 }
 buildTable('tbl-platform');
-syncExpandAllLabel();   /* set initial thead visibility (all cats start collapsed) */
+syncExpandAllLabel();
 
-/* Master expand/collapse-all toggle (Shopify-inspired) */
+/* Master expand/collapse-all toggle */
 function toggleAllCategories(e) {
   if(e) e.preventDefault();
   const b = document.getElementById('tbl-platform');
   if(!b) return;
   const cats = b.querySelectorAll('.cat-tr');
-  /* If any are closed, expand all. Otherwise collapse all. */
   const anyClosed = Array.from(cats).some(c => c.classList.contains('closed'));
   cats.forEach(c => {
     if(anyClosed) c.classList.remove('closed');
     else c.classList.add('closed');
-    b.querySelectorAll(`[data-gm="${c.dataset.g}"]`).forEach(r => r.style.display = anyClosed ? '' : 'none');
+    b.querySelectorAll(`[data-gm="${c.dataset.g}"]`).forEach(r => {
+      if (r.dataset.filtered === 'out') return;
+      r.style.display = anyClosed ? '' : 'none';
+    });
   });
   syncExpandAllLabel();
 }
 function syncExpandAllLabel() {
-  const link = document.getElementById('js-expand-all');
+  const btn = document.getElementById('js-expand-all');
   const tbody = document.getElementById('tbl-platform');
-  if(!tbody) return;
+  if(!tbody || !btn) return;
   const cats = tbody.querySelectorAll('.cat-tr');
   const allClosed = Array.from(cats).every(c => c.classList.contains('closed'));
-  if(link) link.textContent = allClosed ? 'Expand all →' : 'Collapse all →';
-  /* Hide plan-column headers when nothing is expanded — avoids phantom empty cells */
-  const thead = tbody.closest('table')?.querySelector('thead');
-  if(thead) thead.style.display = allClosed ? 'none' : '';
+  btn.textContent = allClosed ? 'Expand all' : 'Collapse all';
 }
+
+/* ─── COMPARE TABLE — live feature search ─────────────────────────── */
+(function compareSearch(){
+  const input = document.getElementById('js-compare-search');
+  const clear = document.getElementById('js-compare-search-clear');
+  const wrap  = document.getElementById('js-compare-search-wrap');
+  const tbody = document.getElementById('tbl-platform');
+  const tblOuter = tbody && tbody.closest('.tbl-outer');
+  if (!input || !tbody || !tblOuter) return;
+
+  let noResultsEl = null;
+
+  function apply(q) {
+    q = (q || '').trim().toLowerCase();
+    wrap.classList.toggle('has-value', q.length > 0);
+    const cats = tbody.querySelectorAll('.cat-tr');
+
+    if (!q) {
+      // Reset: restore default collapsed/open state based on each cat's class.
+      cats.forEach(cat => {
+        const closed = cat.classList.contains('closed');
+        cat.style.display = '';
+        tbody.querySelectorAll(`[data-gm="${cat.dataset.g}"]`).forEach(r => {
+          r.dataset.filtered = 'in';
+          r.style.display = closed ? 'none' : '';
+        });
+      });
+      if (noResultsEl) noResultsEl.hidden = true;
+      return;
+    }
+
+    // Search: show all matching feature rows, auto-expand parents,
+    // hide empty categories.
+    let totalMatches = 0;
+    cats.forEach(cat => {
+      const rows = tbody.querySelectorAll(`[data-gm="${cat.dataset.g}"]`);
+      let matches = 0;
+      rows.forEach(r => {
+        const hit = r.dataset.feature && r.dataset.feature.includes(q);
+        r.dataset.filtered = hit ? 'in' : 'out';
+        r.style.display = hit ? '' : 'none';
+        if (hit) matches++;
+      });
+      if (matches > 0) {
+        cat.style.display = '';
+        cat.classList.remove('closed');
+        totalMatches += matches;
+      } else {
+        cat.style.display = 'none';
+      }
+    });
+
+    if (!noResultsEl) {
+      noResultsEl = document.createElement('div');
+      noResultsEl.className = 'compare-no-results';
+      tblOuter.appendChild(noResultsEl);
+    }
+    if (totalMatches === 0) {
+      noResultsEl.textContent = `No features match "${q}". Try "shipping", "POS", or "webhooks".`;
+      noResultsEl.hidden = false;
+    } else {
+      noResultsEl.hidden = true;
+    }
+    syncExpandAllLabel();
+  }
+
+  input.addEventListener('input', e => apply(e.target.value));
+  clear.addEventListener('click', () => {
+    input.value = '';
+    apply('');
+    input.focus();
+  });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { input.value = ''; apply(''); }
+  });
+})();
 
 /* ─── PRICING STRATEGY (spec source of truth) ─────────────────────── */
 /* Authoritative PLANS config per Fynd Commerce Pricing Spec.
