@@ -995,10 +995,14 @@ body.drawer-open .nav-backdrop {
 <!-- BILLING TOGGLE BAR -->
 <div class="billing-bar">
   <div class="toggle-group" role="group" aria-label="Billing period">
-    <button class="toggle-btn" id="btn-m" onclick="setBilling('monthly')">Monthly</button>
-    <button class="toggle-btn on" id="btn-a" onclick="setBilling('annual')">Annual</button>
+    <button class="toggle-btn on" id="btn-m" onclick="setBilling('monthly')">Monthly</button>
+    <button class="toggle-btn" id="btn-a" onclick="setBilling('annual')">Yearly</button>
   </div>
-  <span class="save-tag" id="js-save-tag" hidden>Save 20%</span>
+  <span class="save-tag" id="js-save-tag">Save 25% on yearly</span>
+  <div class="toggle-group" role="group" aria-label="Currency" id="js-currency-group">
+    <button class="toggle-btn on" id="btn-cur-inr" onclick="setCurrency('INR')">INR</button>
+    <button class="toggle-btn" id="btn-cur-usd" onclick="setCurrency('USD')">USD</button>
+  </div>
 </div>
 
 <!-- MAIN SHELL -->
@@ -1058,9 +1062,9 @@ body.drawer-open .nav-backdrop {
     <div class="panel active" id="panel-platform">
 
       <div class="promo-banner-wrap">
-        <div class="promo-banner">
-          <b>Save 20%</b>
-          <span>Starter ₹1,199/mo (was ₹1,499) on annual billing</span>
+        <div class="promo-banner" id="js-promo-banner">
+          <b>Save 25%</b>
+          <span id="js-promo-copy">Starter ₹13,500/mo (was ₹18,000) on yearly billing</span>
         </div>
       </div>
 
@@ -1092,18 +1096,11 @@ body.drawer-open .nav-backdrop {
       <div class="cards-row cols-4" id="platform-cards">
 
         <!-- STARTER -->
-        <div class="card" data-api-key="plan_starter">
+        <div class="card" data-plan-id="starter" data-api-key="plan_starter">
           <div class="card-name">Starter</div>
           <div class="card-tagline">Essential commerce for new &amp; growing D2C brands.</div>
-          <div class="price-area">
-            <div class="price-eyebrow">Starts at</div>
-            <div class="price-main">
-              <span class="price-sym">₹</span>
-              <span class="price-num pp" data-a="11,111" data-m="1,499">11,111</span>
-              <span class="price-per pq" data-a="/year" data-m="/month">/year</span>
-            </div>
-            <div class="price-annual ps" data-a="₹1,499/month · billed annually" data-m="No annual commitment">₹1,499/month · billed annually</div>
-            <div class="price-note">2.5% B2C transaction fee</div>
+          <div class="price-area" data-plan-price>
+            <!-- rendered by renderPlanCards() -->
           </div>
           <button class="card-btn btn-outline">Get started →</button>
           <div class="feat-heading">Includes:</div>
@@ -1118,22 +1115,15 @@ body.drawer-open .nav-backdrop {
         </div>
 
         <!-- GROWTH (featured) -->
-        <div class="card featured" data-api-key="plan_growth">
+        <div class="card featured" data-plan-id="growth" data-api-key="plan_growth">
           <div class="badge-pop">
             <svg width="9" height="9" viewBox="0 0 9 9" aria-hidden="true"><path d="M4.5 1 5.6 3.5 8 3.8 6.2 5.5l.5 2.4L4.5 6.7 2.3 7.9l.5-2.4L1 3.8l2.4-.3z" fill="#00B140"/></svg>
             Most popular
           </div>
           <div class="card-name">Growth</div>
           <div class="card-tagline">For omnichannel retailers scaling online &amp; offline.</div>
-          <div class="price-area">
-            <div class="price-eyebrow">Starts at</div>
-            <div class="price-main">
-              <span class="price-sym">₹</span>
-              <span class="price-num pp" data-a="22,222" data-m="2,999">22,222</span>
-              <span class="price-per pq" data-a="/year" data-m="/month">/year</span>
-            </div>
-            <div class="price-annual ps" data-a="₹2,999/month · billed annually" data-m="No annual commitment">₹2,999/month · billed annually</div>
-            <div class="price-note">2.0% B2C transaction fee</div>
+          <div class="price-area" data-plan-price>
+            <!-- rendered by renderPlanCards() -->
           </div>
           <button class="card-btn btn-dark">Get started →</button>
           <div class="feat-heading">Everything in Starter, plus:</div>
@@ -1149,18 +1139,11 @@ body.drawer-open .nav-backdrop {
         </div>
 
         <!-- SCALE -->
-        <div class="card" data-api-key="plan_scale">
+        <div class="card" data-plan-id="scale" data-api-key="plan_scale">
           <div class="card-name">Scale</div>
           <div class="card-tagline">For multi-store operators and high-volume merchants.</div>
-          <div class="price-area">
-            <div class="price-eyebrow">Starts at</div>
-            <div class="price-main">
-              <span class="price-sym">₹</span>
-              <span class="price-num pp" data-a="33,333" data-m="3,999">33,333</span>
-              <span class="price-per pq" data-a="/year" data-m="/month">/year</span>
-            </div>
-            <div class="price-annual ps" data-a="₹3,999/month · billed annually" data-m="No annual commitment">₹3,999/month · billed annually</div>
-            <div class="price-note">1.5% B2C transaction fee</div>
+          <div class="price-area" data-plan-price>
+            <!-- rendered by renderPlanCards() -->
           </div>
           <button class="card-btn btn-outline">Get started →</button>
           <div class="feat-heading">Everything in Growth, plus:</div>
@@ -1175,21 +1158,14 @@ body.drawer-open .nav-backdrop {
           <a href="#" class="cross-nudge" onclick="show('logistics');return false;">Add Managed Logistics →</a>
         </div>
 
-        <!-- ENTERPRISE — sales nudge only, no PLG -->
-        <div class="card" data-api-key="plan_enterprise">
+        <!-- ENTERPRISE — sales-led SLG: billing toggle has no effect, no yearly total, no savings -->
+        <div class="card" data-plan-id="enterprise" data-api-key="plan_enterprise">
           <div class="card-name">Enterprise</div>
           <div class="card-tagline">For large retail chains, marketplaces &amp; complex operations.</div>
-          <div class="price-area">
-            <div class="price-eyebrow">Custom pricing</div>
-            <div class="price-main">
-              <span class="price-num free-price">Custom</span>
-            </div>
-            <div class="price-annual">Competitive rates · starts at 0.25%</div>
+          <div class="price-area" data-plan-price>
+            <!-- rendered by renderPlanCards() -->
           </div>
-          <div class="cta-stack">
-            <button class="card-btn btn-dark">Book a demo →</button>
-            <a href="#" class="cta-secondary">or talk to sales →</a>
-          </div>
+          <button class="card-btn btn-dark">Contact sales →</button>
           <div class="feat-heading">Everything in Scale, plus:</div>
           <ul class="feat-list">
             <li><span class="feat-tick">✓</span> B2B storefront</li>
@@ -1468,7 +1444,7 @@ body.drawer-open .nav-backdrop {
               <strong id="calc-sum-subtotal">—</strong>
             </div>
             <div class="calc-summary-total-row calc-summary-total-row--muted" id="calc-sum-discount-row" hidden>
-              <span>Annual 20% off</span>
+              <span>Yearly 25% off</span>
               <strong id="calc-sum-discount">—</strong>
             </div>
             <div class="calc-summary-total-row calc-summary-total-row--big">
@@ -1669,17 +1645,128 @@ function syncExpandAllLabel() {
   if(thead) thead.style.display = allClosed ? 'none' : '';
 }
 
-/* ─── BILLING TOGGLE ──────────────────────────────────────────────── */
-let mode = 'annual';
+/* ─── PRICING STRATEGY (spec source of truth) ─────────────────────── */
+/* Authoritative PLANS config per Fynd Commerce Pricing Spec.
+ * Values are pre-calculated and rounded — do not derive at runtime. */
+const PLANS = [
+  { id: "starter", name: "Starter",
+    INR: { monthly: 18000, yearly_per_month: 13500, yearly_total: 162000 },
+    USD: { monthly: 225,   yearly_per_month: 169,   yearly_total: 2028  },
+    discount_pct: 25, enterprise: false },
+  { id: "growth", name: "Growth",
+    INR: { monthly: 33000, yearly_per_month: 24750, yearly_total: 297000 },
+    USD: { monthly: 413,   yearly_per_month: 309,   yearly_total: 3708  },
+    discount_pct: 25, enterprise: false },
+  { id: "scale", name: "Scale",
+    INR: { monthly: 60000, yearly_per_month: 45000, yearly_total: 540000 },
+    USD: { monthly: 750,   yearly_per_month: 563,   yearly_total: 6756  },
+    discount_pct: 25, enterprise: false },
+  { id: "enterprise", name: "Enterprise",
+    INR: { monthly: 120000, yearly_per_month: 120000, yearly_total: null },
+    USD: { monthly: 1500,   yearly_per_month: 1500,   yearly_total: null },
+    discount_pct: 0, enterprise: true }
+];
+const PLAN_BY_ID = PLANS.reduce((m, p) => (m[p.id] = p, m), {});
+
+const getPrice = (plan, currency, cycle) =>
+  cycle === "yearly"
+    ? plan[currency].yearly_per_month
+    : plan[currency].monthly;
+
+/* Cycle normalization — UI uses 'monthly' / 'annual' internally for
+ * back-compat with calculator's state.billing. Spec calls these
+ * 'monthly' / 'yearly'. Mapping layer keeps both happy. */
+const isYearlyCycle = (m) => m === 'annual' || m === 'yearly';
+
+/* Format currency per spec — whole units only, no paise/cents.
+ * INR uses Indian lakh/crore grouping (en-IN); USD uses en-US. */
+function formatPrice(amount, currency) {
+  if (amount == null) return '';
+  const locale = currency === 'USD' ? 'en-US' : 'en-IN';
+  return Math.round(amount).toLocaleString(locale);
+}
+function currencySymbol(currency) { return currency === 'USD' ? '$' : '₹'; }
+
+/* ─── BILLING + CURRENCY STATE ─────────────────────────────────────── */
+let mode = 'monthly';        // spec default: monthly
+let currency = 'INR';        // spec default: INR (primary for India)
+
 function setBilling(m) {
   mode = m;
-  document.getElementById('btn-a').classList.toggle('on', m==='annual');
+  document.getElementById('btn-a').classList.toggle('on', isYearlyCycle(m));
   document.getElementById('btn-m').classList.toggle('on', m==='monthly');
-  document.getElementById('js-save-tag').hidden = (m === 'annual');
-  document.querySelectorAll('.pp').forEach(el => el.textContent = m==='annual' ? el.dataset.a : el.dataset.m);
-  document.querySelectorAll('.pq').forEach(el => el.textContent = m==='annual' ? el.dataset.a : el.dataset.m);
-  document.querySelectorAll('.ps').forEach(el => el.textContent = m==='annual' ? el.dataset.a : el.dataset.m);
+  // Show the "Save 25% on yearly" nudge while user is viewing monthly
+  document.getElementById('js-save-tag').hidden = isYearlyCycle(m);
+  // Non-platform panel cards still use data-a / data-m toggles
+  document.querySelectorAll('.pp').forEach(el => el.textContent = isYearlyCycle(m) ? el.dataset.a : el.dataset.m);
+  document.querySelectorAll('.pq').forEach(el => el.textContent = isYearlyCycle(m) ? el.dataset.a : el.dataset.m);
+  document.querySelectorAll('.ps').forEach(el => el.textContent = isYearlyCycle(m) ? el.dataset.a : el.dataset.m);
+  renderPlanCards();
+  renderPromoBanner();
 }
+
+function setCurrency(c) {
+  if (c !== 'INR' && c !== 'USD') return;
+  currency = c;
+  document.getElementById('btn-cur-inr').classList.toggle('on', c === 'INR');
+  document.getElementById('btn-cur-usd').classList.toggle('on', c === 'USD');
+  renderPlanCards();
+  renderPromoBanner();
+}
+
+function renderPromoBanner() {
+  const copy = document.getElementById('js-promo-copy');
+  if (!copy) return;
+  const starter = PLAN_BY_ID.starter;
+  const sym = currencySymbol(currency);
+  const m = starter[currency].monthly;
+  const y = starter[currency].yearly_per_month;
+  copy.textContent = `Starter ${sym}${formatPrice(y, currency)}/mo (was ${sym}${formatPrice(m, currency)}) on yearly billing`;
+}
+
+function renderPlanCards() {
+  const cards = document.querySelectorAll('[data-plan-id]');
+  const cycle = isYearlyCycle(mode) ? 'yearly' : 'monthly';
+  const sym = currencySymbol(currency);
+
+  cards.forEach(card => {
+    const plan = PLAN_BY_ID[card.getAttribute('data-plan-id')];
+    if (!plan) return;
+    const priceHost = card.querySelector('[data-plan-price]');
+    if (!priceHost) return;
+
+    const price = getPrice(plan, currency, cycle);
+    const yearlyTotal = plan[currency].yearly_total;
+    const monthly = plan[currency].monthly;
+    const showingYearly = cycle === 'yearly' && !plan.enterprise;
+    const savingsPerMonth = monthly - plan[currency].yearly_per_month;
+
+    let html = '';
+    html += '<div class="price-eyebrow">Starts at</div>';
+    html += '<div class="price-main">'
+      + '<span class="price-sym">' + sym + '</span>'
+      + '<span class="price-num">' + formatPrice(price, currency) + '</span>'
+      + '<span class="price-per">/month</span>'
+    + '</div>';
+
+    if (showingYearly && yearlyTotal != null) {
+      html += '<div class="price-annual">' + sym + formatPrice(yearlyTotal, currency) + ' billed annually</div>';
+    } else if (!plan.enterprise && cycle === 'monthly') {
+      html += '<div class="price-annual">No yearly commitment</div>';
+    }
+
+    if (showingYearly && savingsPerMonth > 0) {
+      html += '<div class="price-note">Save ' + sym + formatPrice(savingsPerMonth, currency) + '/mo vs monthly</div>';
+    }
+
+    priceHost.innerHTML = html;
+  });
+}
+
+/* Initial render — run after DOM is parsed (script tag is at end of body). */
+renderPlanCards();
+renderPromoBanner();
+setBilling('monthly');
 
 /* ─── LEFT NAV SWITCHER ───────────────────────────────────────────── */
 const PANEL_LABELS = {
