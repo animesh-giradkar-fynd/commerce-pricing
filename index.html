@@ -483,12 +483,19 @@ td {
   color: var(--gray-500); vertical-align: middle;
 }
 td:not(:first-child) { text-align: center; color: var(--black); }
-.cat-tr { background: var(--gray-100) !important; cursor: pointer; user-select: none; transition: background .14s; }
-.cat-tr:hover { background: #EDEDE8 !important; }
+/* Collapsed categories read as simple clickable list rows (no band).
+ * Expanded categories use the gray band as a section header above
+ * their feature rows — the change in treatment signals state clearly. */
+.cat-tr { cursor: pointer; user-select: none; transition: background .14s; }
+.cat-tr.closed { background: var(--white) !important; }
+.cat-tr.closed:hover { background: #FAFAF7 !important; }
+.cat-tr:not(.closed) { background: var(--gray-100) !important; }
+.cat-tr:not(.closed):hover { background: #EDEDE8 !important; }
 .cat-tr td {
   font-size: 13px; font-weight: 600; color: var(--black);
   padding: 12px 16px;
 }
+.cat-tr.closed td { font-weight: 500; color: var(--gray-700); }
 .cat-row {
   display: inline-flex; align-items: center;
   gap: 10px;
@@ -1850,20 +1857,20 @@ function syncExpandAllLabel() {
  * Values are pre-calculated and rounded — do not derive at runtime. */
 const PLANS = [
   { id: "starter", name: "Starter",
-    INR: { monthly: 18000, yearly_per_month: 13500, yearly_total: 162000 },
-    USD: { monthly: 225,   yearly_per_month: 169,   yearly_total: 2028  },
+    INR: { monthly: 1800,   yearly_per_month: 1350,   yearly_total: 21600  },
+    USD: { monthly: 225,    yearly_per_month: 169,    yearly_total: 2700   },
     discount_pct: 25, enterprise: false },
   { id: "growth", name: "Growth",
-    INR: { monthly: 33000, yearly_per_month: 24750, yearly_total: 297000 },
-    USD: { monthly: 413,   yearly_per_month: 309,   yearly_total: 3708  },
+    INR: { monthly: 4500,   yearly_per_month: 3375,   yearly_total: 54000  },
+    USD: { monthly: 563,    yearly_per_month: 423,    yearly_total: 6756   },
     discount_pct: 25, enterprise: false },
   { id: "scale", name: "Scale",
-    INR: { monthly: 60000, yearly_per_month: 45000, yearly_total: 540000 },
-    USD: { monthly: 750,   yearly_per_month: 563,   yearly_total: 6756  },
+    INR: { monthly: 10000,  yearly_per_month: 7500,   yearly_total: 120000 },
+    USD: { monthly: 1250,   yearly_per_month: 938,    yearly_total: 15000  },
     discount_pct: 25, enterprise: false },
   { id: "enterprise", name: "Enterprise",
     INR: { monthly: 120000, yearly_per_month: 120000, yearly_total: null },
-    USD: { monthly: 1500,   yearly_per_month: 1500,   yearly_total: null },
+    USD: { monthly: 5000,   yearly_per_month: 5000,   yearly_total: null },
     discount_pct: 0, enterprise: true }
 ];
 const PLAN_BY_ID = PLANS.reduce((m, p) => (m[p.id] = p, m), {});
@@ -1914,15 +1921,20 @@ function setCurrency(c) {
 
 function renderPromoBanner() {
   const banner = document.getElementById('js-promo-banner');
+  const label = banner && banner.querySelector('b');
   const copy = document.getElementById('js-promo-copy');
-  if (!banner || !copy) return;
-  // The banner's whole purpose is to nudge yearly — hide once user is on yearly.
-  banner.hidden = isYearlyCycle(mode);
+  if (!banner || !copy || !label) return;
   const starter = PLAN_BY_ID.starter;
   const sym = currencySymbol(currency);
   const m = starter[currency].monthly;
   const y = starter[currency].yearly_per_month;
-  copy.textContent = `Starter ${sym}${formatPrice(y, currency)}/mo (was ${sym}${formatPrice(m, currency)}) on yearly billing`;
+  if (isYearlyCycle(mode)) {
+    label.textContent = "You're saving 25%";
+    copy.textContent = `Starter ${sym}${formatPrice(y, currency)}/mo vs ${sym}${formatPrice(m, currency)} monthly`;
+  } else {
+    label.textContent = 'Save 25%';
+    copy.textContent = `Starter ${sym}${formatPrice(y, currency)}/mo (was ${sym}${formatPrice(m, currency)}) on yearly billing`;
+  }
 }
 
 function renderPlanCards() {
