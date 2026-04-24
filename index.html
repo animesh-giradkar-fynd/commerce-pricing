@@ -46,11 +46,13 @@
   --border:       #E0E0D8;
   --border-light: #EBEBЕ4;
 
-  /* Typography */
-  /* Matches fynd.com exactly: Fynd Sans (primary display) + Inter Display (body).
-     Fynd Sans is the real proprietary typeface, loaded from Fynd's Webflow CDN
-     above. Inter Display picks up weights 400-700 where Fynd Sans only ships 400. */
-  --font:         'Fynd Sans', 'Inter Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Typography — matches fynd.com: Fynd Sans on display surfaces only,
+     Inter Display for body/UI. Fynd Sans ships one weight (400, heavy by
+     design), so leaving it in the body stack caused the browser to
+     synthesize fake-bold for 500-700 text — which looked blurry and
+     heavy. Body now uses Inter Display (native 400-700); --font-display
+     is applied only to .section-title and .price-num. */
+  --font:         'Inter Display', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Fynd Sans', 'Inter Display', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Layout */
@@ -269,6 +271,7 @@ body.drawer-open { overflow: hidden; }
   margin: 0 auto 8px; text-align: center; display: block;
 }
 .section-title {
+  font-family: var(--font-display); font-synthesis: none;
   font-size: 44px; font-weight: 700; letter-spacing: -1.2px;
   color: var(--black); line-height: 1.1;
   margin: 0 auto 14px; max-width: 760px; text-align: center;
@@ -345,6 +348,7 @@ body.drawer-open { overflow: hidden; }
   align-self: flex-start; padding-top: 5px; line-height: 1;
 }
 .price-num {
+  font-family: var(--font-display); font-synthesis: none;
   font-size: 36px; font-weight: 700; letter-spacing: -1.2px;
   color: var(--black); line-height: 1;
 }
